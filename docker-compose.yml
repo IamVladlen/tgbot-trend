@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  mongodb:
+    image: mongo
+    container_name: tg_mg
+    ports:
+      - 27020:27017
+    env_file:
+      - ./.env
+    volumes:
+      - ./mgdb:/data/db
