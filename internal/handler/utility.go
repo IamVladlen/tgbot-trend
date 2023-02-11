@@ -17,21 +17,37 @@ type utilityHandler struct{}
 func newUtilityHandler(handler *th.BotHandler) {
 	h := &utilityHandler{}
 
+	handler.HandleCallbackQuery(h.works, th.CallbackDataEqual("Works"))
 	handler.HandleMessage(h.start, th.CommandEqual(_cmdStart))
 	handler.HandleMessage(h.help, th.CommandEqual(_cmdHelp))
+}
+
+func (h *utilityHandler) works(bot *telego.Bot, query telego.CallbackQuery) {
+	m := tu.Message(
+		tu.ID(query.Message.Chat.ID),
+		"Works!",
+	)
+
+	bot.SendMessage(m)
 }
 
 func (h *utilityHandler) start(bot *telego.Bot, message telego.Message) {
 	kb := tu.Keyboard(
 		tu.KeyboardRow(
-			tu.KeyboardButton("/country").WithText("/"+_cmdCountry),
+			tu.KeyboardButton("").WithText(_cmdCountry),
+		),
+	)
+
+	ik := tu.InlineKeyboard(
+		tu.InlineKeyboardRow(
+			tu.InlineKeyboardButton("Works?").WithCallbackData("Works"),
 		),
 	)
 	
 	m := tu.Message(
 		tu.ID(message.Chat.ID),
 		msg.UtilStart,
-	).WithReplyMarkup(kb)
+	).WithReplyMarkup(kb).WithReplyMarkup(ik)
 
 	bot.SendMessage(m)
 }
@@ -39,10 +55,10 @@ func (h *utilityHandler) start(bot *telego.Bot, message telego.Message) {
 func (h *utilityHandler) help(bot *telego.Bot, message telego.Message) {
 	kb := tu.Keyboard(
 		tu.KeyboardRow(
-			tu.KeyboardButton("/country").WithText("/"+_cmdCountry),
+			tu.KeyboardButton("").WithText(_cmdCountry),
 		),
 		tu.KeyboardRow(
-			tu.KeyboardButton("/trends").WithText("/"+_cmdTrends),
+			tu.KeyboardButton("").WithText(_cmdTrends),
 		),
 	)
 	m := tu.Message(

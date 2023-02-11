@@ -13,13 +13,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type chatRepo struct {
+type countryRepo struct {
 	mg *mongo.Collection
 }
 
 // ChangeCountry updates the country value in the chat document
 // or creates new document if there's no records.
-func (db *chatRepo) ChangeCountry(chat entity.Chat) error {
+func (db *countryRepo) ChangeCountry(chat entity.Chat) error {
 	ctx, cancel := context.WithTimeout(context.Background(), _mongoRequestTimeout*time.Second)
 	defer cancel()
 
@@ -42,7 +42,7 @@ func (db *chatRepo) ChangeCountry(chat entity.Chat) error {
 }
 
 // GetCountry gets ISO code of the country set in chat.
-func (db *chatRepo) GetCountry(id int) (string, error) {
+func (db *countryRepo) GetCountry(id int) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), _mongoRequestTimeout*time.Second)
 	defer cancel()
 
@@ -56,8 +56,8 @@ func (db *chatRepo) GetCountry(id int) (string, error) {
 	return chat.Country, nil
 }
 
-func newChatRepo(mg *mongodb.DB) *chatRepo {
-	return &chatRepo{
+func newCountryRepo(mg *mongodb.DB) *countryRepo {
+	return &countryRepo{
 		mg: mg.Collection(_chatCollection),
 	}
 }

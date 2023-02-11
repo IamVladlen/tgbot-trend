@@ -6,12 +6,12 @@ import (
 	"github.com/IamVladlen/trend-bot/internal/entity"
 )
 
-type ChatUC struct {
+type CountryUC struct {
 	repo Chat
 }
 
 // ChangeCountry changes country of fetched trends in chat.
-func (uc *ChatUC) ChangeCountry(chat entity.Chat) error {
+func (uc *CountryUC) ChangeCountry(chat entity.Chat) error {
 	country, err := uc.validateCountry(chat.Country)
 	if err != nil {
 		return fmt.Errorf("usecase - ChangeCountry: %w", err)
@@ -29,7 +29,7 @@ func (uc *ChatUC) ChangeCountry(chat entity.Chat) error {
 
 // validateCountry converts emoji to plain text and returns
 // an error if there is no reference.
-func (uc *ChatUC) validateCountry(text string) (string, error) {
+func (uc *CountryUC) validateCountry(text string) (string, error) {
 	switch text {
 	case "🇩🇪":
 		return "DE", nil
@@ -52,8 +52,8 @@ func (uc *ChatUC) validateCountry(text string) (string, error) {
 	}
 }
 
-func newChatUC(repo Chat) *ChatUC {
-	return &ChatUC{
+func newCountryUC(repo Chat) *CountryUC {
+	return &CountryUC{
 		repo: repo,
 	}
 }

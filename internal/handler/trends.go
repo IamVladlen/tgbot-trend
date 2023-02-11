@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	_cmdTrends = "trends"
+	_cmdTrends = "Get trends"
 )
 
 type trendsHandler struct {
@@ -24,7 +24,7 @@ func newTrendsHandler(handler *th.BotHandler, uc *usecase.UseCase, log *logger.L
 		log: log,
 	}
 
-	handler.HandleMessage(h.getTrends, th.CommandEqual(_cmdTrends))
+	handler.HandleMessage(h.getTrends, th.TextEqual(_cmdTrends))
 }
 
 // getTrends sends a list of trends.
@@ -43,10 +43,10 @@ func (h *trendsHandler) getTrends(bot *telego.Bot, message telego.Message) {
 
 	kb := tu.Keyboard(
 		tu.KeyboardRow(
-			tu.KeyboardButton("/country").WithText("/"+_cmdCountry),
+			tu.KeyboardButton("").WithText(_cmdCountry),
 		),
 		tu.KeyboardRow(
-			tu.KeyboardButton("/trends").WithText("/"+_cmdTrends),
+			tu.KeyboardButton("").WithText(_cmdTrends),
 		),
 	)
 	m := tu.Message(

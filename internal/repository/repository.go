@@ -22,6 +22,6 @@ type Chat interface {
 
 func New(mg *mongodb.DB) *Repository {
 	return &Repository{
-		newChatRepo(mg),
+		newCountryRepo(mg),
 	}
 }
