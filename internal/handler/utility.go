@@ -9,7 +9,7 @@ import (
 
 const (
 	_cmdStart = "start"
-	_cmdHelp = "help"
+	_cmdHelp  = "help"
 )
 
 type utilityHandler struct{}
@@ -22,19 +22,33 @@ func newUtilityHandler(handler *th.BotHandler) {
 }
 
 func (h *utilityHandler) start(bot *telego.Bot, message telego.Message) {
+	kb := tu.Keyboard(
+		tu.KeyboardRow(
+			tu.KeyboardButton("/country").WithText("/"+_cmdCountry),
+		),
+	)
+	
 	m := tu.Message(
 		tu.ID(message.Chat.ID),
 		msg.UtilStart,
-	)
+	).WithReplyMarkup(kb)
 
 	bot.SendMessage(m)
 }
 
 func (h *utilityHandler) help(bot *telego.Bot, message telego.Message) {
+	kb := tu.Keyboard(
+		tu.KeyboardRow(
+			tu.KeyboardButton("/country").WithText("/"+_cmdCountry),
+		),
+		tu.KeyboardRow(
+			tu.KeyboardButton("/trends").WithText("/"+_cmdTrends),
+		),
+	)
 	m := tu.Message(
 		tu.ID(message.Chat.ID),
 		msg.UtilHelp,
-	)
+	).WithReplyMarkup(kb)
 
 	bot.SendMessage(m)
 }

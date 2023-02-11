@@ -31,6 +31,14 @@ func (uc *ChatUC) ChangeCountry(chat entity.Chat) error {
 // an error if there is no reference.
 func (uc *ChatUC) validateCountry(text string) (string, error) {
 	switch text {
+	case "🇩🇪":
+		return "DE", nil
+	case "🇪🇸":
+		return "ES", nil
+	case "🇫🇷":
+		return "FR", nil
+	case "🇮🇹":
+		return "IT", nil
 	case "🇬🇧":
 		return "GB", nil
 	case "🇷🇺":
