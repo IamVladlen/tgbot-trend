@@ -41,10 +41,18 @@ func (h *trendsHandler) getTrends(bot *telego.Bot, message telego.Message) {
 		return
 	}
 
+	kb := tu.Keyboard(
+		tu.KeyboardRow(
+			tu.KeyboardButton("/country").WithText("/"+_cmdCountry),
+		),
+		tu.KeyboardRow(
+			tu.KeyboardButton("/trends").WithText("/"+_cmdTrends),
+		),
+	)
 	m := tu.Message(
 		tu.ID(message.Chat.ID),
 		trends.String(),
-	)
+	).WithReplyMarkup(kb)
 
 	bot.SendMessage(m)
 }

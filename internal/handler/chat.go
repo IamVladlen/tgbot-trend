@@ -36,10 +36,25 @@ func newChatHandler(handler *th.BotHandler, uc *usecase.UseCase, log *logger.Log
 // callChangeCountry puts the chat in waiting for the country id in the next message.
 func (h *chatHandler) callChangeCountry(bot *telego.Bot, message telego.Message) {
 	h.isChangeable = true
+
+	kb := tu.Keyboard(
+		tu.KeyboardRow(
+			tu.KeyboardButton("DE").WithText("🇩🇪"),
+			tu.KeyboardButton("ES").WithText("🇪🇸"),
+			tu.KeyboardButton("FR").WithText("🇫🇷"),
+			tu.KeyboardButton("IT").WithText("🇮🇹"),
+		),
+		tu.KeyboardRow(
+			tu.KeyboardButton("RU").WithText("🇬🇧"),
+			tu.KeyboardButton("UA").WithText("🇷🇺"),
+			tu.KeyboardButton("UK").WithText("🇺🇦"),
+			tu.KeyboardButton("US").WithText("🇺🇸"),
+		),
+	)
 	m := tu.Message(
 		tu.ID(message.Chat.ID),
 		msg.CallChangeCountry,
-	)
+	).WithReplyMarkup(kb)
 
 	bot.SendMessage(m)
 }
@@ -64,10 +79,19 @@ func (h *chatHandler) changeCountry(bot *telego.Bot, message telego.Message) {
 	}
 
 	h.isChangeable = false
+
+	kb := tu.Keyboard(
+		tu.KeyboardRow(
+			tu.KeyboardButton("/country").WithText("/"+_cmdCountry),
+		),
+		tu.KeyboardRow(
+			tu.KeyboardButton("/trends").WithText("/"+_cmdTrends),
+		),
+	)
 	m := tu.Message(
 		tu.ID(message.Chat.ID),
 		msg.ChangeCountrySucc,
-	)
+	).WithReplyMarkup(kb)
 
 	bot.SendMessage(m)
 }
