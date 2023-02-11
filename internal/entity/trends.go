@@ -32,7 +32,7 @@ func (t *Trends) String() string {
 	trendsArr := make([]string, 0, len(t.Data.ItemList))
 	numEmojis := []string{"1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"}
 
-	header := fmt.Sprintf("🔍 What is being discussed on %s\n", time.Now().Format("02-Jan-2006"))
+	header := fmt.Sprintf("🔍 What's discussed on %s\n", time.Now().Format("Jan 02 2006"))
 
 	trendsArr = append(trendsArr, header)
 

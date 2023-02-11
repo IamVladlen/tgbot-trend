@@ -14,7 +14,7 @@ func New(handler *th.BotHandler, uc *usecase.UseCase, log *logger.Logger) *th.Bo
 	newUtilityHandler(handler)
 
 	// Initialize handlers
-	newChatHandler(handler, uc, log)
+	newCountryHandler(handler, uc, log)
 	newTrendsHandler(handler, uc, log)
 
 	return handler

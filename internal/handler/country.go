@@ -11,30 +11,30 @@ import (
 )
 
 const (
-	_cmdCountry = "country"
+	_cmdCountry = "Set country"
 )
 
-type chatHandler struct {
+type countryHandler struct {
 	uc  *usecase.UseCase
 	log *logger.Logger
 
 	isChangeable bool
 }
 
-func newChatHandler(handler *th.BotHandler, uc *usecase.UseCase, log *logger.Logger) {
-	h := &chatHandler{
+func newCountryHandler(handler *th.BotHandler, uc *usecase.UseCase, log *logger.Logger) {
+	h := &countryHandler{
 		uc:  uc,
 		log: log,
 
 		isChangeable: false,
 	}
 
-	handler.HandleMessage(h.callChangeCountry, th.CommandEqual(_cmdCountry))
+	handler.HandleMessage(h.callChangeCountry, th.TextEqual(_cmdCountry))
 	handler.HandleMessage(h.changeCountry, h.changeCountryCond)
 }
 
 // callChangeCountry puts the chat in waiting for the country id in the next message.
-func (h *chatHandler) callChangeCountry(bot *telego.Bot, message telego.Message) {
+func (h *countryHandler) callChangeCountry(bot *telego.Bot, message telego.Message) {
 	h.isChangeable = true
 
 	kb := tu.Keyboard(
@@ -60,7 +60,7 @@ func (h *chatHandler) callChangeCountry(bot *telego.Bot, message telego.Message)
 }
 
 // changeCountry changes country of fetched trends in chat.
-func (h *chatHandler) changeCountry(bot *telego.Bot, message telego.Message) {
+func (h *countryHandler) changeCountry(bot *telego.Bot, message telego.Message) {
 	chat := entity.Chat{
 		ChatId:  int(message.Chat.ID),
 		Country: message.Text,
@@ -82,10 +82,10 @@ func (h *chatHandler) changeCountry(bot *telego.Bot, message telego.Message) {
 
 	kb := tu.Keyboard(
 		tu.KeyboardRow(
-			tu.KeyboardButton("/country").WithText("/"+_cmdCountry),
+			tu.KeyboardButton("").WithText(_cmdCountry),
 		),
 		tu.KeyboardRow(
-			tu.KeyboardButton("/trends").WithText("/"+_cmdTrends),
+			tu.KeyboardButton("").WithText(_cmdTrends),
 		),
 	)
 	m := tu.Message(
@@ -96,6 +96,6 @@ func (h *chatHandler) changeCountry(bot *telego.Bot, message telego.Message) {
 	bot.SendMessage(m)
 }
 
-func (h *chatHandler) changeCountryCond(update telego.Update) bool {
+func (h *countryHandler) changeCountryCond(update telego.Update) bool {
 	return h.isChangeable
 }

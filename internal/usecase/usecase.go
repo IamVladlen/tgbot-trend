@@ -7,7 +7,7 @@ import (
 )
 
 type UseCase struct {
-	*ChatUC
+	*CountryUC
 	*TrendsUC
 }
 
@@ -26,7 +26,7 @@ type TrendsWebAPI interface {
 
 func New(repo *repository.Repository, api *webapi.WebAPI) *UseCase {
 	return &UseCase{
-		newChatUC(repo.Chat),
+		newCountryUC(repo.Chat),
 		newTrendsUC(repo.Chat, api),
 	}
 }
