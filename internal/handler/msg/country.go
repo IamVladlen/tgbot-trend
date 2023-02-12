@@ -1,8 +1,13 @@
 package msg
 
+import "fmt"
+
 // TODO: Refactor messages
 const (
-	CallChangeCountry = `👇 Send the flag emoji of the country in which you would like to see the trends. You can change this at any time.`
-	ChangeCountrySucc = `ok`
-	ChangeCountryFail = `fail`
+	CallChangeCountry = `👇 Сlick on the country you are interested in. You can change this at any time.`
+	ChangeCountryFail = `🤔 We this country in our database. Please select another one.`
 )
+
+func ChangeCountrySucc(country string) string {
+	return fmt.Sprintf(`Country set to %s`, country)
+}

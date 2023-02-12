@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/IamVladlen/trend-bot/internal/handler/msg"
+	"github.com/IamVladlen/trend-bot/internal/handler/ui"
 	"github.com/IamVladlen/trend-bot/internal/usecase"
 	"github.com/IamVladlen/trend-bot/pkg/logger"
 	"github.com/mymmrac/telego"
@@ -24,35 +25,30 @@ func newTrendsHandler(handler *th.BotHandler, uc *usecase.UseCase, log *logger.L
 		log: log,
 	}
 
-	handler.HandleMessage(h.getTrends, th.TextEqual(_cmdTrends))
+	handler.HandleCallbackQuery(h.getTrends, th.CallbackDataEqual(_cmdTrends))
 }
 
 // getTrends sends a list of trends.
-func (h *trendsHandler) getTrends(bot *telego.Bot, message telego.Message) {
-	trends, err := h.uc.GetTrends(int(message.Chat.ID))
+func (h *trendsHandler) getTrends(bot *telego.Bot, query telego.CallbackQuery) {
+	id := query.Message.Chat.ID
+
+	trends, err := h.uc.GetTrends(int(id))
 	if err != nil {
 		h.log.Error().Msg("can't get trends: " + err.Error())
-		m := tu.Message(
-			tu.ID(message.Chat.ID),
-			msg.GetTrendsFailFetch,
-		)
 
+		m := tu.Message(
+			tu.ID(id),
+			msg.GetTrendsFailFetch,
+		).WithReplyMarkup(ui.InlineButtons(_cmdCountry, _cmdTrends))
 		bot.SendMessage(m)
+
 		return
 	}
 
-	kb := tu.Keyboard(
-		tu.KeyboardRow(
-			tu.KeyboardButton("").WithText(_cmdCountry),
-		),
-		tu.KeyboardRow(
-			tu.KeyboardButton("").WithText(_cmdTrends),
-		),
-	)
 	m := tu.Message(
-		tu.ID(message.Chat.ID),
+		tu.ID(id),
 		trends.String(),
-	).WithReplyMarkup(kb)
+	).WithReplyMarkup(ui.InlineButtons(_cmdCountry, _cmdTrends))
 
 	bot.SendMessage(m)
 }

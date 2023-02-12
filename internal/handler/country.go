@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/IamVladlen/trend-bot/internal/entity"
 	"github.com/IamVladlen/trend-bot/internal/handler/msg"
+	"github.com/IamVladlen/trend-bot/internal/handler/ui"
 	"github.com/IamVladlen/trend-bot/internal/usecase"
 	"github.com/IamVladlen/trend-bot/pkg/logger"
 	"github.com/mymmrac/telego"
@@ -29,70 +30,55 @@ func newCountryHandler(handler *th.BotHandler, uc *usecase.UseCase, log *logger.
 		isChangeable: false,
 	}
 
-	handler.HandleMessage(h.callChangeCountry, th.TextEqual(_cmdCountry))
-	handler.HandleMessage(h.changeCountry, h.changeCountryCond)
+	handler.HandleCallbackQuery(h.callChangeCountry, th.CallbackDataEqual(_cmdCountry))
+	handler.HandleCallbackQuery(h.changeCountry, th.AnyCallbackQuery(), h.changeCountryCond)
 }
 
 // callChangeCountry puts the chat in waiting for the country id in the next message.
-func (h *countryHandler) callChangeCountry(bot *telego.Bot, message telego.Message) {
+func (h *countryHandler) callChangeCountry(bot *telego.Bot, query telego.CallbackQuery) {
+	id := query.Message.Chat.ID
 	h.isChangeable = true
+	countries := []string{"🇩🇪", "🇪🇸", "🇫🇷", "🇮🇹", "🇬🇧", "🇷🇺", "🇺🇦", "🇺🇸"}
 
-	kb := tu.Keyboard(
-		tu.KeyboardRow(
-			tu.KeyboardButton("DE").WithText("🇩🇪"),
-			tu.KeyboardButton("ES").WithText("🇪🇸"),
-			tu.KeyboardButton("FR").WithText("🇫🇷"),
-			tu.KeyboardButton("IT").WithText("🇮🇹"),
-		),
-		tu.KeyboardRow(
-			tu.KeyboardButton("RU").WithText("🇬🇧"),
-			tu.KeyboardButton("UA").WithText("🇷🇺"),
-			tu.KeyboardButton("UK").WithText("🇺🇦"),
-			tu.KeyboardButton("US").WithText("🇺🇸"),
-		),
-	)
 	m := tu.Message(
-		tu.ID(message.Chat.ID),
+		tu.ID(id),
 		msg.CallChangeCountry,
-	).WithReplyMarkup(kb)
+	).WithReplyMarkup(ui.InlineCountries(countries))
 
 	bot.SendMessage(m)
 }
 
 // changeCountry changes country of fetched trends in chat.
-func (h *countryHandler) changeCountry(bot *telego.Bot, message telego.Message) {
+func (h *countryHandler) changeCountry(bot *telego.Bot, query telego.CallbackQuery) {
+	id := query.Message.Chat.ID
+	country := query.Data
+
 	chat := entity.Chat{
-		ChatId:  int(message.Chat.ID),
-		Country: message.Text,
+		ChatId:  int(id),
+		Country: country,
 	}
 
 	if err := h.uc.ChangeCountry(chat); err != nil {
 		h.isChangeable = false
 		h.log.Error().Msg("can't change country: " + err.Error())
-		m := tu.Message(
-			tu.ID(message.Chat.ID),
-			msg.ChangeCountryFail,
-		)
 
+		m := tu.Message(
+			tu.ID(id),
+			msg.ChangeCountryFail,
+		).WithReplyMarkup(ui.InlineButton(_cmdCountry))
 		bot.SendMessage(m)
+
 		return
 	}
 
 	h.isChangeable = false
 
-	kb := tu.Keyboard(
-		tu.KeyboardRow(
-			tu.KeyboardButton("").WithText(_cmdCountry),
-		),
-		tu.KeyboardRow(
-			tu.KeyboardButton("").WithText(_cmdTrends),
-		),
-	)
 	m := tu.Message(
-		tu.ID(message.Chat.ID),
-		msg.ChangeCountrySucc,
-	).WithReplyMarkup(kb)
+		tu.ID(id),
+		msg.ChangeCountrySucc(country),
+	).WithReplyMarkup(ui.InlineButtons(_cmdCountry, _cmdTrends))
 
+	bot.DeleteMessage(&telego.DeleteMessageParams{ChatID: tu.ID(id), MessageID: query.Message.MessageID})
 	bot.SendMessage(m)
 }
 
