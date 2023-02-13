@@ -19,11 +19,15 @@ type countryRepo struct {
 
 // ChangeCountry updates the country value in the chat document
 // or creates new document if there's no records.
-func (db *countryRepo) ChangeCountry(chat entity.Chat) error {
-	ctx, cancel := context.WithTimeout(context.Background(), _mongoRequestTimeout*time.Second)
-	defer cancel()
+func (db *countryRepo) ChangeCountry(id int, country string) error {
+	chat := entity.Chat{
+		ChatId:    id,
+		UpdatedAt: primitive.NewDateTimeFromTime(time.Now()),
+		Country:   country,
+	}
 
-	chat.UpdatedAt = primitive.NewDateTimeFromTime(time.Now())
+	ctx, cancel := context.WithTimeout(context.Background(), _mgdbRequestTimeout*time.Second)
+	defer cancel()
 
 	filter := bson.D{{Key: "chat_id", Value: chat.ChatId}}
 	update := bson.D{
@@ -43,7 +47,7 @@ func (db *countryRepo) ChangeCountry(chat entity.Chat) error {
 
 // GetCountry gets ISO code of the country set in chat.
 func (db *countryRepo) GetCountry(id int) (string, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), _mongoRequestTimeout*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), _mgdbRequestTimeout*time.Second)
 	defer cancel()
 
 	var chat entity.Chat
@@ -58,6 +62,6 @@ func (db *countryRepo) GetCountry(id int) (string, error) {
 
 func newCountryRepo(mg *mongodb.DB) *countryRepo {
 	return &countryRepo{
-		mg: mg.Collection(_chatCollection),
+		mg: mg.Collection(_chatMgdbCollection),
 	}
 }

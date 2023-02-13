@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"github.com/IamVladlen/trend-bot/internal/entity"
 	"github.com/IamVladlen/trend-bot/internal/handler/msg"
 	"github.com/IamVladlen/trend-bot/internal/handler/ui"
 	"github.com/IamVladlen/trend-bot/internal/usecase"
@@ -51,14 +50,9 @@ func (h *countryHandler) callChangeCountry(bot *telego.Bot, query telego.Callbac
 // changeCountry changes country of fetched trends in chat.
 func (h *countryHandler) changeCountry(bot *telego.Bot, query telego.CallbackQuery) {
 	id := query.Message.Chat.ID
-	country := query.Data
+	text := query.Data
 
-	chat := entity.Chat{
-		ChatId:  int(id),
-		Country: country,
-	}
-
-	if err := h.uc.ChangeCountry(chat); err != nil {
+	if err := h.uc.ChangeCountry(int(id), text); err != nil {
 		h.isChangeable = false
 		h.log.Error().Msg("can't change country: " + err.Error())
 
@@ -72,12 +66,12 @@ func (h *countryHandler) changeCountry(bot *telego.Bot, query telego.CallbackQue
 	}
 
 	h.isChangeable = false
-	
+
 	bot.DeleteMessage(&telego.DeleteMessageParams{ChatID: tu.ID(id), MessageID: query.Message.MessageID})
 
 	m := tu.Message(
 		tu.ID(id),
-		msg.ChangeCountrySucc(country),
+		msg.ChangeCountrySucc(text),
 	).WithReplyMarkup(ui.InlineButtons(_cmdCountry, _cmdTrends))
 	bot.SendMessage(m)
 }

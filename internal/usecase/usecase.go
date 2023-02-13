@@ -6,13 +6,15 @@ import (
 	"github.com/IamVladlen/trend-bot/internal/webapi"
 )
 
+//go:generate mockgen -source=usecase.go -destination=mocks/mock.go
+
 type UseCase struct {
 	*CountryUC
 	*TrendsUC
 }
 
-type Chat interface {
-	ChangeCountry(chat entity.Chat) error
+type CountryRepo interface {
+	ChangeCountry(id int, country string) error
 	GetCountry(id int) (string, error)
 }
 
@@ -26,7 +28,7 @@ type TrendsWebAPI interface {
 
 func New(repo *repository.Repository, api *webapi.WebAPI) *UseCase {
 	return &UseCase{
-		newCountryUC(repo.Chat),
-		newTrendsUC(repo.Chat, api),
+		newCountryUC(repo.Country),
+		newTrendsUC(repo.Country, api),
 	}
 }
