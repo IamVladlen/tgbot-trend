@@ -27,7 +27,6 @@ func (h *utilityHandler) start(bot *telego.Bot, message telego.Message) {
 		tu.ID(message.Chat.ID),
 		msg.UtilStart,
 	).WithReplyMarkup(ui.InlineButton(_cmdCountry))
-
 	bot.SendMessage(m)
 }
 

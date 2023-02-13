@@ -9,7 +9,7 @@ import (
 )
 
 func New(handler *th.BotHandler, uc *usecase.UseCase, log *logger.Logger) *th.BotHandler {
-	// Health check
+	// Utility handlers
 	handler.HandleMessage(healthCheck, healthCheckCond)
 	newUtilityHandler(handler)
 
