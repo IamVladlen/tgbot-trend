@@ -72,13 +72,13 @@ func (h *countryHandler) changeCountry(bot *telego.Bot, query telego.CallbackQue
 	}
 
 	h.isChangeable = false
+	
+	bot.DeleteMessage(&telego.DeleteMessageParams{ChatID: tu.ID(id), MessageID: query.Message.MessageID})
 
 	m := tu.Message(
 		tu.ID(id),
 		msg.ChangeCountrySucc(country),
 	).WithReplyMarkup(ui.InlineButtons(_cmdCountry, _cmdTrends))
-
-	bot.DeleteMessage(&telego.DeleteMessageParams{ChatID: tu.ID(id), MessageID: query.Message.MessageID})
 	bot.SendMessage(m)
 }
 

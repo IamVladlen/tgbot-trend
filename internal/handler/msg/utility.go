@@ -1,7 +1,6 @@
 package msg
 
-// TODO: Refactor messages
 const (
-	UtilStart = `Working on it`
-	UtilHelp  = `Working on it`
+	UtilStart = `👋 Hi! This is Trend Bot. It Sends you popular topics discussed on the Internet.`
+	UtilHelp  = `👉 The bot sends you the Top 10 topics searched by internet users in the country you selected.`
 )
