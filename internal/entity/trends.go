@@ -11,19 +11,19 @@ import (
 
 type Trends struct {
 	XML  xml.Name `xml:"rss"`
-	Data *Data    `xml:"channel"`
+	Data *data    `xml:"channel"`
 }
 
-type Data struct {
-	ItemList []Item `xml:"item"`
+type data struct {
+	ItemList []item `xml:"item"`
 }
 
-type Item struct {
+type item struct {
 	Title    string `xml:"title"`
-	NewsList []News `xml:"news_item"`
+	NewsList []news `xml:"news_item"`
 }
 
-type News struct {
+type news struct {
 	Headline string `xml:"news_item_title"`
 	Link     string `xml:"news_item_url"`
 }
