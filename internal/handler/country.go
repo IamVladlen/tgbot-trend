@@ -50,15 +50,27 @@ func (h *countryHandler) callChangeCountry(bot *telego.Bot, query telego.Callbac
 // changeCountry changes country of fetched trends in chat.
 func (h *countryHandler) changeCountry(bot *telego.Bot, query telego.CallbackQuery) {
 	id := query.Message.Chat.ID
-	text := query.Data
-
-	if err := h.uc.ChangeCountry(int(id), text); err != nil {
+	country, err := validateCountry(query.Data)
+	if err != nil {
 		h.isChangeable = false
 		h.log.Error().Msg("can't change country: " + err.Error())
 
 		m := tu.Message(
 			tu.ID(id),
-			msg.ChangeCountryFail,
+			msg.ChangeCountryInputFail,
+		).WithReplyMarkup(ui.InlineButton(_cmdCountry))
+		bot.SendMessage(m)
+
+		return
+	}
+
+	if err := h.uc.ChangeCountry(int(id), country); err != nil {
+		h.isChangeable = false
+		h.log.Error().Msg("can't change country: " + err.Error())
+
+		m := tu.Message(
+			tu.ID(id),
+			msg.ChangeCountryServerFail,
 		).WithReplyMarkup(ui.InlineButton(_cmdCountry))
 		bot.SendMessage(m)
 
@@ -71,11 +83,38 @@ func (h *countryHandler) changeCountry(bot *telego.Bot, query telego.CallbackQue
 
 	m := tu.Message(
 		tu.ID(id),
-		msg.ChangeCountrySucc(text),
+		msg.ChangeCountrySucc(country),
 	).WithReplyMarkup(ui.InlineButtons(_cmdCountry, _cmdTrends))
 	bot.SendMessage(m)
 }
 
 func (h *countryHandler) changeCountryCond(update telego.Update) bool {
 	return h.isChangeable
+}
+
+// TODO: Switch to map after increasing the number of countries
+
+// validateCountry converts emoji to plain text and returns
+// an error if there is no reference.
+func validateCountry(text string) (string, error) {
+	switch text {
+	case "🇩🇪":
+		return "DE", nil
+	case "🇪🇸":
+		return "ES", nil
+	case "🇫🇷":
+		return "FR", nil
+	case "🇮🇹":
+		return "IT", nil
+	case "🇬🇧":
+		return "GB", nil
+	case "🇷🇺":
+		return "RU", nil
+	case "🇺🇦":
+		return "UA", nil
+	case "🇺🇸", "🇺🇲":
+		return "US", nil
+	default:
+		return "", errInvalidCountry
+	}
 }

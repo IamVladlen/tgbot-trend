@@ -6,7 +6,7 @@ import (
 	"github.com/IamVladlen/trend-bot/internal/webapi"
 )
 
-//go:generate mockgen -source=usecase.go -destination=mocks/mock.go
+//go:generate mockgen -source=usecase.go -destination=./mocks/mocks.go -package=mocks
 
 type UseCase struct {
 	*CountryUC
