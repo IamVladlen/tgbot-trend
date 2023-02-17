@@ -22,6 +22,8 @@ func InlineButtons(cmd1, cmd2 string) *telego.InlineKeyboardMarkup {
 	)
 }
 
+// TODO: Move magic number to constant
+
 func InlineCountries(countries []string) *telego.InlineKeyboardMarkup {
 	rows := make([][]telego.InlineKeyboardButton, 2)
 	for i := range rows {
