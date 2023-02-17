@@ -16,10 +16,15 @@ type Config struct {
 	} `mapstructure:",squash"`
 
 	Mongo struct {
-		URI string `mapstructure:"MONGO_URI"`
-		DbName string `mapstructure:"MONGO_INITDB_DATABASE"`
-		User string `mapstructure:"MONGO_INITDB_ROOT_USERNAME"`
+		URI      string `mapstructure:"MONGO_URI"`
+		DbName   string `mapstructure:"MONGO_INITDB_DATABASE"`
+		User     string `mapstructure:"MONGO_INITDB_ROOT_USERNAME"`
 		Password string `mapstructure:"MONGO_INITDB_ROOT_PASSWORD"`
+	} `mapstructure:",squash"`
+
+	Redis struct {
+		URI      string `mapstructure:"REDIS_URI"`
+		Password string `mapstructure:"REDIS_PASSWORD"`
 	} `mapstructure:",squash"`
 }
 

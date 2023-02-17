@@ -8,6 +8,7 @@ import (
 	"github.com/IamVladlen/trend-bot/internal/webapi"
 	"github.com/IamVladlen/trend-bot/pkg/logger"
 	"github.com/IamVladlen/trend-bot/pkg/mongodb"
+	"github.com/IamVladlen/trend-bot/pkg/redisdb"
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
 )
@@ -17,9 +18,10 @@ import (
 
 // Run starts the bot and connects all dependencies
 func Run(cfg *config.Config, log *logger.Logger) {
-	mgDb := mongodb.New(cfg.Mongo.URI, cfg.Mongo.User, cfg.Mongo.Password, cfg.Mongo.DbName)
-	repo := repository.New(mgDb)
-	webAPI := webapi.New()
+	mgdb := mongodb.New(cfg.Mongo.URI, cfg.Mongo.User, cfg.Mongo.Password, cfg.Mongo.DbName)
+	repo := repository.New(mgdb)
+	cache := redisdb.New(cfg.Redis.URI, cfg.Redis.Password)
+	webAPI := webapi.New(cache, log)
 
 	uc := usecase.New(repo, webAPI)
 
