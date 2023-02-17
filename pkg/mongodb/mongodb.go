@@ -17,14 +17,21 @@ type DB struct {
 	*mongo.Database
 }
 
-func New(uri string, username, password string, dbName string) *DB {
+type Deps struct {
+	URI      string
+	Username string
+	Password string
+	DBName   string
+}
+
+func New(d Deps) *DB {
 	ctx, cancel := context.WithTimeout(context.Background(), _connectionTimeout*time.Second)
 	defer cancel()
 
-	opts := options.Client().ApplyURI(uri)
+	opts := options.Client().ApplyURI(d.URI)
 	opts.SetAuth(options.Credential{
-		Username: username,
-		Password: password,
+		Username: d.Username,
+		Password: d.Password,
 	})
 
 	clt, err := mongo.Connect(ctx, opts)
@@ -36,7 +43,7 @@ func New(uri string, username, password string, dbName string) *DB {
 		log.Fatalln("Can't connect to MongoDB:", err)
 	}
 
-	db := clt.Database(dbName)
+	db := clt.Database(d.DBName)
 
 	return &DB{
 		db,

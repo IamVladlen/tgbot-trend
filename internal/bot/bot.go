@@ -18,7 +18,12 @@ import (
 
 // Run starts the bot and connects all dependencies
 func Run(cfg *config.Config, log *logger.Logger) {
-	mgdb := mongodb.New(cfg.Mongo.URI, cfg.Mongo.User, cfg.Mongo.Password, cfg.Mongo.DbName)
+	mgdb := mongodb.New(mongodb.Deps{
+		URI:      cfg.Mongo.URI,
+		Username: cfg.Mongo.User,
+		Password: cfg.Mongo.Password,
+		DBName:   cfg.Mongo.DBName,
+	})
 	repo := repository.New(mgdb)
 	cache := redisdb.New(cfg.Redis.URI, cfg.Redis.Password)
 	webAPI := webapi.New(cache, log)

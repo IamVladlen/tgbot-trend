@@ -17,7 +17,7 @@ type Config struct {
 
 	Mongo struct {
 		URI      string `mapstructure:"MONGO_URI"`
-		DbName   string `mapstructure:"MONGO_INITDB_DATABASE"`
+		DBName   string `mapstructure:"MONGO_INITDB_DATABASE"`
 		User     string `mapstructure:"MONGO_INITDB_ROOT_USERNAME"`
 		Password string `mapstructure:"MONGO_INITDB_ROOT_PASSWORD"`
 	} `mapstructure:",squash"`
