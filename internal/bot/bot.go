@@ -1,6 +1,10 @@
 package bot
 
 import (
+	"os"
+	"os/signal"
+	"syscall"
+
 	"github.com/IamVladlen/trend-bot/config"
 	"github.com/IamVladlen/trend-bot/internal/handler"
 	"github.com/IamVladlen/trend-bot/internal/repository"
@@ -9,46 +13,43 @@ import (
 	"github.com/IamVladlen/trend-bot/pkg/logger"
 	"github.com/IamVladlen/trend-bot/pkg/mongodb"
 	"github.com/IamVladlen/trend-bot/pkg/redisdb"
-	"github.com/mymmrac/telego"
-	th "github.com/mymmrac/telego/telegohandler"
+	"github.com/IamVladlen/trend-bot/pkg/tgbot"
 )
-
-// TODO: Move bot initialization to pkg
-// TODO: Implement graceful shutdown
 
 // Run starts the bot and connects all dependencies
 func Run(cfg *config.Config, log *logger.Logger) {
+	// Databases
 	mgdb := mongodb.New(mongodb.Deps{
 		URI:      cfg.Mongo.URI,
 		Username: cfg.Mongo.User,
 		Password: cfg.Mongo.Password,
 		DBName:   cfg.Mongo.DBName,
 	})
-	repo := repository.New(mgdb)
 	cache := redisdb.New(cfg.Redis.URI, cfg.Redis.Password)
-	webAPI := webapi.New(cache, log)
 
+	// Bot dependencies
+	repo := repository.New(mgdb)
+	webAPI := webapi.New(cache, log)
 	uc := usecase.New(repo, webAPI)
 
-	bot, err := telego.NewBot(cfg.Bot.Token)
-	if err != nil {
-		log.Fatal().Msgf("app - Run - telego.NewBot: %s", err.Error())
+	// Bot initialization and start
+	bot := tgbot.New(cfg.Bot.Token)
+	handler.New(bot.Handler, uc, log)
+
+	bot.Start()
+
+	// Graceful shutdown
+	sigCh := make(chan os.Signal, 1)
+	signal.Notify(sigCh, syscall.SIGTERM, syscall.SIGINT)
+
+	s := <-sigCh
+	log.Info().Msg("Server is shutting down: " + s.String() + " signal")
+
+	bot.Stop()
+
+	if err := mgdb.Disconnect(); err != nil {
+		log.Error().Msg(err.Error())
 	}
 
-	updates, err := bot.UpdatesViaLongPolling(nil)
-	if err != nil {
-		log.Fatal().Msgf("app - Run - telego.NewBot: %s", err.Error())
-	}
-	defer bot.StopLongPolling()
-
-	h, err := th.NewBotHandler(bot, updates)
-	if err != nil {
-		log.Fatal().Msgf("app - Run - th.NewBotHandler: %s", err.Error())
-	}
-	defer h.Stop()
-
-	handler.New(h, uc, log)
-
-	log.Info().Msg("Bot has successfully launched")
-	h.Start()
+	cache.Close()
 }
