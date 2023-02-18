@@ -49,3 +49,13 @@ func New(d Deps) *DB {
 		db,
 	}
 }
+
+func (db *DB) Disconnect() error {
+	ctx, cancel := context.WithTimeout(context.Background(), _connectionTimeout)
+	defer cancel()
+	if err := db.Client().Disconnect(ctx); err != nil {
+		return err
+	}
+
+	return nil
+}
