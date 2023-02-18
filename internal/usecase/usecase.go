@@ -26,6 +26,7 @@ type TrendsWebAPI interface {
 	GetTrends(country string) (entity.Trends, error)
 }
 
+// New creates use case instance.
 func New(repo *repository.Repository, api *webapi.WebAPI) *UseCase {
 	return &UseCase{
 		newCountryUC(repo.Country),

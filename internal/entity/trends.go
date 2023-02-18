@@ -9,6 +9,7 @@ import (
 
 // TODO: Store chat country in Trends struct for reactive trend messages
 
+// Trends stores received data from the Web API.
 type Trends struct {
 	XML  xml.Name `xml:"rss"`
 	Data *data    `xml:"channel"`
@@ -37,7 +38,7 @@ func (t *Trends) String() string {
 	trendsArr = append(trendsArr, header)
 
 	for i, item := range t.Data.ItemList {
-		itemTitle := numEmojis[i]+" "+item.Title
+		itemTitle := numEmojis[i] + " " + item.Title
 		trendsArr = append(trendsArr, itemTitle)
 		for _, news := range item.NewsList {
 			str := fmt.Sprintf("%s\n", news.Link)

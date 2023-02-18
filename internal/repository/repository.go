@@ -14,6 +14,7 @@ type Repository struct {
 	Country *countryRepo
 }
 
+// New creates repository instance.
 func New(mg *mongodb.DB) *Repository {
 	return &Repository{
 		newCountryRepo(mg),

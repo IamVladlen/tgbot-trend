@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Config stores data from ./config/config.yaml and ./.env files.
 type Config struct {
 	App struct {
 		LogLevel string `mapstructure:"log_level"`
@@ -28,6 +29,8 @@ type Config struct {
 	} `mapstructure:",squash"`
 }
 
+// New creates new config instance with data from
+// config files.
 func New() *Config {
 	var cfg *Config
 
