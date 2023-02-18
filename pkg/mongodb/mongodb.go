@@ -24,7 +24,7 @@ type Deps struct {
 	DBName   string
 }
 
-// New creates MongoDB client instance and initialize new database.
+// New creates MongoDB client instance and initializes new database.
 func New(d Deps) *DB {
 	ctx, cancel := context.WithTimeout(context.Background(), _connectionTimeout*time.Second)
 	defer cancel()
