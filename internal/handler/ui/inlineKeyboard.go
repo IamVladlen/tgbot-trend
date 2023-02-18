@@ -5,6 +5,10 @@ import (
 	tu "github.com/mymmrac/telego/telegoutil"
 )
 
+const (
+	_maxRows = 2
+)
+
 func InlineButton(cmd string) *telego.InlineKeyboardMarkup {
 	return tu.InlineKeyboard(
 		tu.InlineKeyboardRow(
@@ -22,10 +26,8 @@ func InlineButtons(cmd1, cmd2 string) *telego.InlineKeyboardMarkup {
 	)
 }
 
-// TODO: Move magic number to constant
-
 func InlineCountries(countries []string) *telego.InlineKeyboardMarkup {
-	rows := make([][]telego.InlineKeyboardButton, 2)
+	rows := make([][]telego.InlineKeyboardButton, _maxRows)
 	for i := range rows {
 		rows[i] = make([]telego.InlineKeyboardButton, len(countries)/len(rows))
 	}
