@@ -20,20 +20,15 @@ type countryRepo struct {
 // ChangeCountry updates the country value in the chat document
 // or creates new document if there's no records.
 func (db *countryRepo) ChangeCountry(id int, country string) error {
-	chat := entity.Chat{
-		ChatId:    id,
-		UpdatedAt: primitive.NewDateTimeFromTime(time.Now()),
-		Country:   country,
-	}
-
 	ctx, cancel := context.WithTimeout(context.Background(), _mgdbRequestTimeout*time.Second)
 	defer cancel()
 
 	// Build query
-	filter := bson.D{{Key: "chat_id", Value: chat.ChatId}}
+	filter := bson.D{{Key: "chat_id", Value: id}}
 	update := bson.D{
 		{Key: "$set", Value: bson.D{
-			{Key: "country", Value: chat.Country}, {Key: "updated_at", Value: chat.UpdatedAt},
+			{Key: "country", Value: country},
+			{Key: "updated_at", Value: primitive.NewDateTimeFromTime(time.Now())},
 		}},
 	}
 	opts := options.Update().SetUpsert(true)
