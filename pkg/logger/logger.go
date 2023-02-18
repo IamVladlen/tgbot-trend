@@ -11,6 +11,7 @@ type Logger struct {
 	zerolog.Logger
 }
 
+// New creates new logger instance.
 func New(logLevel string) *Logger {
 	logger := &Logger{
 		zerolog.New(os.Stdout).With().Timestamp().Logger().Level(setLogLevel(logLevel)),

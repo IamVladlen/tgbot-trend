@@ -29,6 +29,7 @@ func (db *countryRepo) ChangeCountry(id int, country string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), _mgdbRequestTimeout*time.Second)
 	defer cancel()
 
+	// Build query
 	filter := bson.D{{Key: "chat_id", Value: chat.ChatId}}
 	update := bson.D{
 		{Key: "$set", Value: bson.D{
@@ -37,6 +38,7 @@ func (db *countryRepo) ChangeCountry(id int, country string) error {
 	}
 	opts := options.Update().SetUpsert(true)
 
+	// Execute query
 	_, err := db.mg.UpdateOne(ctx, filter, update, opts)
 	if err != nil {
 		return fmt.Errorf("repository - ChangeCountry: %w", err)

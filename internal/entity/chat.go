@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// Chat stores user's or group chat info.
 type Chat struct {
 	Id        primitive.ObjectID `bson:"_id"`
 	ChatId    int                `bson:"chat_id"`

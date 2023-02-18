@@ -6,6 +6,7 @@ type DB struct {
 	*redis.Client
 }
 
+// New creates Redis client instance.
 func New(uri string, password string) *DB {
 	opts := &redis.Options{
 		Addr: uri,
@@ -15,7 +16,7 @@ func New(uri string, password string) *DB {
 	}
 
 	rdb := redis.NewClient(opts)
-	
+
 	return &DB{
 		rdb,
 	}

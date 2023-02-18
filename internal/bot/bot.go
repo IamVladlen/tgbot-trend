@@ -16,7 +16,7 @@ import (
 	"github.com/IamVladlen/trend-bot/pkg/tgbot"
 )
 
-// Run starts the bot and connects all dependencies
+// Run starts the bot and connects all dependencies.
 func Run(cfg *config.Config, log *logger.Logger) {
 	// Databases
 	mgdb := mongodb.New(mongodb.Deps{

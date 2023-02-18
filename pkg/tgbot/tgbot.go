@@ -13,6 +13,7 @@ type bot struct {
 	Handler *th.BotHandler
 }
 
+// New creates bot instance with handler.
 func New(token string) *bot {
 	b, err := telego.NewBot(token)
 	if err != nil {
@@ -35,6 +36,7 @@ func New(token string) *bot {
 	}
 }
 
+// Start starts updates handling.
 func (b *bot) Start() {
 	go func() {
 		fmt.Println("Bot has successfully launched")
@@ -42,6 +44,7 @@ func (b *bot) Start() {
 	}()
 }
 
+// Stop gracefully stops updates receiving.
 func (b *bot) Stop() {
 	b.bot.StopLongPolling()
 	b.Handler.Stop()

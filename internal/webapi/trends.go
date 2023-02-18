@@ -30,10 +30,12 @@ type WebAPI struct {
 func (a *WebAPI) GetTrends(country string) (entity.Trends, error) {
 	var trends entity.Trends
 
+	// Check if cache contains trends
 	if err := a.get(&trends, country); err == nil {
 		return trends, nil
 	}
 
+	// Fetch and set if cache is empty
 	if err := a.fetch(&trends, country); err != nil {
 		return entity.Trends{}, fmt.Errorf("webapi - GetTrends: %w", err)
 	}
