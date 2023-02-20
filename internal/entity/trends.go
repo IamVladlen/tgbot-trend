@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// TODO: Store chat country in Trends struct for reactive trend messages
+// TODO: Store chat country in Trends struct for reactivity
 
 // Trends stores received data from the Web API.
 type Trends struct {
