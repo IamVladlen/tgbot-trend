@@ -21,5 +21,9 @@ func New(handler *th.BotHandler, uc *usecase.UseCase, log *logger.Logger) *th.Bo
 }
 
 func healthCheck(bot *telego.Bot, message telego.Message) {
-	bot.SendMessage(tu.Message(tu.ID(message.Chat.ID), "I'm working, beep boop"))
+	m := tu.MessageWithEntities(
+		tu.ID(message.Chat.ID),
+		tu.Entity("I'm working, beep boop").Italic(),
+	)
+	bot.SendMessage(m)
 }
