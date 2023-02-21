@@ -6,6 +6,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+// TODO: Set enviroment variables via github.com/kelseyhightower/envconfig
+
 // Config stores data from ./config/config.yaml and ./.env files.
 type Config struct {
 	App struct {
