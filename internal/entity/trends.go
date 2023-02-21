@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	tu "github.com/mymmrac/telego/telegoutil"
 )
 
 // TODO: Store chat country in Trends struct for reactivity
@@ -29,6 +31,32 @@ type news struct {
 	Link     string `xml:"news_item_url"`
 }
 
+// EntityString creates a telegram message with typographic emphases.
+func (t *Trends) EntityString() []tu.MessageEntityCollection {
+	messages := make([]tu.MessageEntityCollection, 0, len(t.Data.ItemList))
+	numEmojis := []string{"1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"}
+
+	header := tu.Entityf("🔍 What's discussed on %s \n\n", time.Now().Format("Jan 02 2006")).Bold()
+	messages = append(messages, header)
+
+	for i, item := range t.Data.ItemList {
+		itemTitle := tu.Entityf("%s %s \n", numEmojis[i], item.Title)
+		messages = append(messages, itemTitle)
+		for _, news := range item.NewsList {
+			newsURL := tu.Entityf("%s \n\n", news.Link)
+			messages = append(messages, newsURL)
+		}
+		i++
+		if i > len(numEmojis)-1 {
+			break
+		}
+	}
+
+	return messages
+}
+
+// String returns formatted Trends as a string.
+// Used primarily for debugging and tests.
 func (t *Trends) String() string {
 	trendsArr := make([]string, 0, len(t.Data.ItemList))
 	numEmojis := []string{"1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"}

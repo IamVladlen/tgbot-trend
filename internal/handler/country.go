@@ -83,7 +83,7 @@ func (h *countryHandler) changeCountry(bot *telego.Bot, query telego.CallbackQue
 
 	m := tu.Message(
 		tu.ID(id),
-		msg.ChangeCountrySucc(country),
+		msg.ChangeCountrySucc(query.Data),
 	).WithReplyMarkup(ui.InlineButtons(_cmdCountry, _cmdTrends))
 	bot.SendMessage(m)
 }
