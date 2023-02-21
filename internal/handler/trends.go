@@ -45,9 +45,10 @@ func (h *trendsHandler) getTrends(bot *telego.Bot, query telego.CallbackQuery) {
 		return
 	}
 
-	m := tu.Message(
+	text := trends.EntityString()
+	m := tu.MessageWithEntities(
 		tu.ID(id),
-		trends.String(),
+		text...,
 	).WithReplyMarkup(ui.InlineButtons(_cmdCountry, _cmdTrends))
 
 	bot.SendMessage(m)

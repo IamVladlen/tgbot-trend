@@ -6,6 +6,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+// TODO: Set enviroment variables via github.com/kelseyhightower/envconfig
+
 // Config stores data from ./config/config.yaml and ./.env files.
 type Config struct {
 	App struct {
@@ -43,6 +45,7 @@ func New() *Config {
 	if err := viper.MergeInConfig(); err != nil {
 		log.Fatalln("Can't load config file:", err)
 	}
+	viper.AutomaticEnv()
 
 	if err := viper.Unmarshal(&cfg); err != nil {
 		log.Fatalln("Can't load config file:", err)
