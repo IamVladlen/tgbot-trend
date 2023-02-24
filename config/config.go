@@ -2,6 +2,7 @@ package config
 
 import (
 	"log"
+	"os"
 
 	"github.com/spf13/viper"
 )
@@ -51,5 +52,19 @@ func New() *Config {
 		log.Fatalln("Can't load config file:", err)
 	}
 
+	loadEnv(cfg)
+
 	return cfg
+}
+
+func loadEnv(cfg *Config) {
+	cfg.Bot.Token = os.Getenv("BOT_TOKEN")
+
+	cfg.Mongo.URI = os.Getenv("MONGO_URI")
+	cfg.Mongo.DBName = os.Getenv("MONGO_INITDB_DATABASE")
+	cfg.Mongo.User = os.Getenv("MONGO_INITDB_ROOT_USERNAME")
+	cfg.Mongo.Password = os.Getenv("MONGO_INITDB_ROOT_PASSWORD")
+
+	cfg.Redis.URI = os.Getenv("REDIS_URI")
+	cfg.Redis.URI = os.Getenv("REDIS_PASSWORD")
 }

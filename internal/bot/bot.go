@@ -16,6 +16,8 @@ import (
 	"github.com/IamVladlen/trend-bot/pkg/tgbot"
 )
 
+// TODO: Refactor Run func (comments and err handling)
+
 // Run starts the bot and connects all dependencies.
 func Run(cfg *config.Config, log *logger.Logger) {
 	// Databases

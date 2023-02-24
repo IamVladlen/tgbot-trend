@@ -1,6 +1,4 @@
-/_storage-data
+/.storage-data
+/.bin
 
 .env
-
-.exe
-.exe~

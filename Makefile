@@ -6,8 +6,8 @@ endif
 
 .PHONY:
 
-db:
-	docker compose up -d
-
 run:
-	go run cmd/main.go
+	go run cmd/bot/main.go
+
+build:
+	docker compose up -d

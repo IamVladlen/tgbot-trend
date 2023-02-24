@@ -11,39 +11,34 @@ func Test_validateCountry(t *testing.T) {
 		text string
 	}
 	tests := []struct {
-		name    string
-		args    args
-		want    string
-		wantErr bool
-		errType error
+		name string
+		args args
+		want string
+		err  error
 	}{
 		{
 			name: "valid_country",
 			args: args{
 				text: "🇺🇸",
 			},
-			want:    "US",
-			wantErr: false,
-			errType: nil,
+			want: "US",
+			err:  nil,
 		},
 		{
 			name: "invalid_country",
 			args: args{
 				text: "invalid",
 			},
-			want:    "",
-			wantErr: false,
-			errType: errInvalidCountry,
+			want: "",
+			err:  errInvalidCountry,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := validateCountry(tt.args.text)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Unexpected error: %s", err.Error())
-				assert.EqualError(t, tt.errType, err.Error())
-			}
-			assert.Equal(t, tt.want, got)
+
+			assert.EqualValues(t, got, tt.want)
+			assert.ErrorIs(t, err, tt.err)
 		})
 	}
 }
