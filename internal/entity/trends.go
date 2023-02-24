@@ -36,15 +36,15 @@ func (t *Trends) EntityString() []tu.MessageEntityCollection {
 	messages := make([]tu.MessageEntityCollection, 0, len(t.Data.ItemList))
 	numEmojis := []string{"1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"}
 
-	header := tu.Entityf("🔍 What's discussed on %s \n\n", time.Now().Format("Jan 02 2006")).Bold()
-	messages = append(messages, header)
+	header := tu.Entityf("🔍 What's discussed on %s", time.Now().Format("Jan 02 2006")).Bold()
+	messages = append(messages, header, tu.Entity("\n\n"))
 
 	for i, item := range t.Data.ItemList {
-		itemTitle := tu.Entityf("%s %s \n", numEmojis[i], item.Title)
-		messages = append(messages, itemTitle)
+		itemTitle := tu.Entityf("%s %s", numEmojis[i], item.Title)
+		messages = append(messages, itemTitle, tu.Entity("\n"))
 		for _, news := range item.NewsList {
-			newsURL := tu.Entityf("%s \n\n", news.Link)
-			messages = append(messages, newsURL)
+			newsURL := tu.Entityf("%s", news.Link)
+			messages = append(messages, newsURL, tu.Entity("\n\n"))
 		}
 		i++
 		if i > len(numEmojis)-1 {
