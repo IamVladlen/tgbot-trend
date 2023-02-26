@@ -34,7 +34,9 @@ func (h *trendsHandler) getTrends(bot *telego.Bot, query telego.CallbackQuery) {
 
 	trends, err := h.uc.GetTrends(int(id))
 	if err != nil {
-		h.log.Error().Msg("can't get trends: " + err.Error())
+		h.log.Error().
+			Err(err).
+			Msg("can't get trends")
 
 		m := tu.Message(
 			tu.ID(id),

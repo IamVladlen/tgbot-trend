@@ -1,7 +1,9 @@
 package handler
 
-import "errors"
+import (
+	"fmt"
+)
 
 var (
-	errInvalidCountry = errors.New("entered wrong text or country that is not yet supported")
+	errInvalidCountry = fmt.Errorf("entered wrong text or country that is not yet supported")
 )

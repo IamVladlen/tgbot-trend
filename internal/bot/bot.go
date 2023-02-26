@@ -16,8 +16,6 @@ import (
 	"github.com/IamVladlen/trend-bot/pkg/tgbot"
 )
 
-// TODO: Refactor Run func (comments and err handling)
-
 // Run starts the bot and connects all dependencies.
 func Run(cfg *config.Config, log *logger.Logger) {
 	// Databases
@@ -50,7 +48,9 @@ func Run(cfg *config.Config, log *logger.Logger) {
 	bot.Stop()
 
 	if err := mgdb.Disconnect(); err != nil {
-		log.Error().Msg(err.Error())
+		log.Error().
+			Err(err).
+			Msg("error occurred while disconnecting from MongoDB")
 	}
 
 	cache.Close()

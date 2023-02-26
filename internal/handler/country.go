@@ -53,7 +53,10 @@ func (h *countryHandler) changeCountry(bot *telego.Bot, query telego.CallbackQue
 	country, err := validateCountry(query.Data)
 	if err != nil {
 		h.isChangeable = false
-		h.log.Error().Msg("can't change country: " + err.Error())
+
+		h.log.Error().
+			Err(err).
+			Msg("can't change country")
 
 		m := tu.Message(
 			tu.ID(id),
@@ -66,7 +69,10 @@ func (h *countryHandler) changeCountry(bot *telego.Bot, query telego.CallbackQue
 
 	if err := h.uc.ChangeCountry(int(id), country); err != nil {
 		h.isChangeable = false
-		h.log.Error().Msg("can't change country: " + err.Error())
+
+		h.log.Error().
+			Err(err).
+			Msg("can't change country")
 
 		m := tu.Message(
 			tu.ID(id),
