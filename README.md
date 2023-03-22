@@ -1,4 +1,4 @@
-![There was a gif, but it didn't load. It's a pity...](https://github.com/IamVladlen/trend-bot/blob/main/trends.gif)
+![There was a gif, but it didn't load. It's a pity...](assets/trends.gif)
 
 <div id="user-content-toc">
   <ul>
