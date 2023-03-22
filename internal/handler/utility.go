@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/IamVladlen/trend-bot/internal/handler/msg"
 	"github.com/IamVladlen/trend-bot/internal/handler/ui"
+	"github.com/IamVladlen/trend-bot/pkg/logger"
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
 	tu "github.com/mymmrac/telego/telegoutil"
@@ -13,13 +14,18 @@ const (
 	_cmdHelp  = "help"
 )
 
-type utilityHandler struct{}
+type utilityHandler struct {
+	log *logger.Logger
+}
 
-func newUtilityHandler(handler *th.BotHandler) {
-	h := &utilityHandler{}
+func newUtilityHandler(handler *th.BotHandler, log *logger.Logger) {
+	h := &utilityHandler{
+		log: log,
+	}
 
 	handler.HandleMessage(h.start, th.CommandEqual(_cmdStart))
 	handler.HandleMessage(h.help, th.CommandEqual(_cmdHelp))
+	handler.HandleMessage(h.healthCheck, th.TextEqual("_Check"))
 }
 
 func (h *utilityHandler) start(bot *telego.Bot, message telego.Message) {
@@ -28,7 +34,12 @@ func (h *utilityHandler) start(bot *telego.Bot, message telego.Message) {
 		msg.UtilStart,
 	).WithReplyMarkup(ui.InlineButton(_cmdCountry))
 
-	bot.SendMessage(m)
+	_, err := bot.SendMessage(m)
+	if err != nil {
+		h.log.Error().
+			Err(err).
+			Msg("Cannot send message")
+	}
 }
 
 func (h *utilityHandler) help(bot *telego.Bot, message telego.Message) {
@@ -37,5 +48,24 @@ func (h *utilityHandler) help(bot *telego.Bot, message telego.Message) {
 		msg.UtilHelp,
 	).WithReplyMarkup(ui.InlineButtons(_cmdCountry, _cmdTrends))
 
-	bot.SendMessage(m)
+	_, err := bot.SendMessage(m)
+	if err != nil {
+		h.log.Error().
+			Err(err).
+			Msg("Cannot send message")
+	}
+}
+
+func (h *utilityHandler) healthCheck(bot *telego.Bot, message telego.Message) {
+	m := tu.MessageWithEntities(
+		tu.ID(message.Chat.ID),
+		tu.Entity("I'm working, beep boop").Italic(),
+	)
+
+	_, err := bot.SendMessage(m)
+	if err != nil {
+		h.log.Error().
+			Err(err).
+			Msg("Cannot send message")
+	}
 }

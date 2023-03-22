@@ -42,7 +42,13 @@ func (h *trendsHandler) getTrends(bot *telego.Bot, query telego.CallbackQuery) {
 			tu.ID(id),
 			msg.GetTrendsFailFetch,
 		).WithReplyMarkup(ui.InlineButtons(_cmdCountry, _cmdTrends))
-		bot.SendMessage(m)
+
+		_, err := bot.SendMessage(m)
+		if err != nil {
+			h.log.Error().
+				Err(err).
+				Msg("Cannot send message")
+		}
 
 		return
 	}
@@ -53,5 +59,10 @@ func (h *trendsHandler) getTrends(bot *telego.Bot, query telego.CallbackQuery) {
 		text...,
 	).WithReplyMarkup(ui.InlineButtons(_cmdCountry, _cmdTrends))
 
-	bot.SendMessage(m)
+	_, err = bot.SendMessage(m)
+	if err != nil {
+		h.log.Error().
+			Err(err).
+			Msg("Cannot send message")
+	}
 }

@@ -44,7 +44,12 @@ func (h *countryHandler) callChangeCountry(bot *telego.Bot, query telego.Callbac
 		msg.CallChangeCountry,
 	).WithReplyMarkup(ui.InlineCountries(countries))
 
-	bot.SendMessage(m)
+	_, err := bot.SendMessage(m)
+	if err != nil {
+		h.log.Error().
+			Err(err).
+			Msg("Cannot send message")
+	}
 }
 
 // changeCountry changes country of fetched trends in chat.
@@ -62,7 +67,13 @@ func (h *countryHandler) changeCountry(bot *telego.Bot, query telego.CallbackQue
 			tu.ID(id),
 			msg.ChangeCountryInputFail,
 		).WithReplyMarkup(ui.InlineButton(_cmdCountry))
-		bot.SendMessage(m)
+
+		_, err := bot.SendMessage(m)
+		if err != nil {
+			h.log.Error().
+				Err(err).
+				Msg("Cannot send message")
+		}
 
 		return
 	}
@@ -78,20 +89,35 @@ func (h *countryHandler) changeCountry(bot *telego.Bot, query telego.CallbackQue
 			tu.ID(id),
 			msg.ChangeCountryServerFail,
 		).WithReplyMarkup(ui.InlineButton(_cmdCountry))
-		bot.SendMessage(m)
+
+		_, err := bot.SendMessage(m)
+		if err != nil {
+			h.log.Error().
+				Err(err).
+				Msg("Cannot send message")
+		}
 
 		return
 	}
 
 	h.isChangeable = false
 
-	bot.DeleteMessage(&telego.DeleteMessageParams{ChatID: tu.ID(id), MessageID: query.Message.MessageID})
+	err = bot.DeleteMessage(&telego.DeleteMessageParams{ChatID: tu.ID(id), MessageID: query.Message.MessageID})
+	if err != nil {
+		h.log.Error().Err(err).Msg("Cannot send message")
+	}
 
 	m := tu.Message(
 		tu.ID(id),
 		msg.ChangeCountrySucc(query.Data),
 	).WithReplyMarkup(ui.InlineButtons(_cmdCountry, _cmdTrends))
-	bot.SendMessage(m)
+
+	_, err = bot.SendMessage(m)
+	if err != nil {
+		h.log.Error().
+			Err(err).
+			Msg("Cannot send message")
+	}
 }
 
 func (h *countryHandler) changeCountryCond(update telego.Update) bool {
