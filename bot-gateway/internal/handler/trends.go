@@ -1,10 +1,10 @@
 package handler
 
 import (
-	"github.com/IamVladlen/trend-bot/internal/handler/msg"
-	"github.com/IamVladlen/trend-bot/internal/handler/ui"
-	"github.com/IamVladlen/trend-bot/internal/usecase"
-	"github.com/IamVladlen/trend-bot/pkg/logger"
+	"github.com/IamVladlen/trend-bot/bot-gateway/internal/handler/msg"
+	"github.com/IamVladlen/trend-bot/bot-gateway/internal/handler/ui"
+	"github.com/IamVladlen/trend-bot/bot-gateway/internal/usecase"
+	"github.com/IamVladlen/trend-bot/bot-gateway/pkg/logger"
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
 	tu "github.com/mymmrac/telego/telegoutil"

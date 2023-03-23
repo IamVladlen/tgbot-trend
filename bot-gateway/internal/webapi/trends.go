@@ -9,9 +9,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/IamVladlen/trend-bot/internal/entity"
-	"github.com/IamVladlen/trend-bot/pkg/logger"
-	"github.com/IamVladlen/trend-bot/pkg/redisdb"
+	"github.com/IamVladlen/trend-bot/bot-gateway/internal/entity"
+	"github.com/IamVladlen/trend-bot/bot-gateway/pkg/logger"
+	"github.com/IamVladlen/trend-bot/bot-gateway/pkg/redisdb"
 )
 
 const (

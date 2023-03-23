@@ -5,15 +5,15 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/IamVladlen/trend-bot/config"
-	"github.com/IamVladlen/trend-bot/internal/handler"
-	"github.com/IamVladlen/trend-bot/internal/repository"
-	"github.com/IamVladlen/trend-bot/internal/usecase"
-	"github.com/IamVladlen/trend-bot/internal/webapi"
-	"github.com/IamVladlen/trend-bot/pkg/logger"
-	"github.com/IamVladlen/trend-bot/pkg/mongodb"
-	"github.com/IamVladlen/trend-bot/pkg/redisdb"
-	"github.com/IamVladlen/trend-bot/pkg/tgbot"
+	"github.com/IamVladlen/trend-bot/bot-gateway/config"
+	"github.com/IamVladlen/trend-bot/bot-gateway/internal/handler"
+	"github.com/IamVladlen/trend-bot/bot-gateway/internal/repository"
+	"github.com/IamVladlen/trend-bot/bot-gateway/internal/usecase"
+	"github.com/IamVladlen/trend-bot/bot-gateway/internal/webapi"
+	"github.com/IamVladlen/trend-bot/bot-gateway/pkg/logger"
+	"github.com/IamVladlen/trend-bot/bot-gateway/pkg/mongodb"
+	"github.com/IamVladlen/trend-bot/bot-gateway/pkg/redisdb"
+	"github.com/IamVladlen/trend-bot/bot-gateway/pkg/tgbot"
 )
 
 // Run starts the bot and connects all dependencies.

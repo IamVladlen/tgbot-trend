@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/IamVladlen/trend-bot/internal/usecase/mocks"
+	"github.com/IamVladlen/trend-bot/bot-gateway/internal/usecase/mocks"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 )

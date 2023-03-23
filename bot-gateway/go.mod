@@ -1,4 +1,4 @@
-module github.com/IamVladlen/trend-bot
+module github.com/IamVladlen/trend-bot/bot-gateway
 
 go 1.19
 

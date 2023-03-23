@@ -42,16 +42,12 @@ func New() *Config {
 		log.Fatalln("Can't load config file:", err)
 	}
 
-	viper.SetConfigFile("./.env")
-	if err := viper.MergeInConfig(); err != nil {
-		log.Fatalln("Can't load config file:", err)
-	}
 	viper.AutomaticEnv()
-
+	
 	if err := viper.Unmarshal(&cfg); err != nil {
 		log.Fatalln("Can't load config file:", err)
 	}
-
+	
 	loadEnv(cfg)
 
 	return cfg

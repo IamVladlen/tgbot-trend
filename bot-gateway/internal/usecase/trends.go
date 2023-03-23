@@ -3,7 +3,7 @@ package usecase
 import (
 	"fmt"
 
-	"github.com/IamVladlen/trend-bot/internal/entity"
+	"github.com/IamVladlen/trend-bot/bot-gateway/internal/entity"
 )
 
 type TrendsUC struct {

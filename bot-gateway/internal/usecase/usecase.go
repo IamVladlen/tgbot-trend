@@ -1,9 +1,9 @@
 package usecase
 
 import (
-	"github.com/IamVladlen/trend-bot/internal/entity"
-	"github.com/IamVladlen/trend-bot/internal/repository"
-	"github.com/IamVladlen/trend-bot/internal/webapi"
+	"github.com/IamVladlen/trend-bot/bot-gateway/internal/entity"
+	"github.com/IamVladlen/trend-bot/bot-gateway/internal/repository"
+	"github.com/IamVladlen/trend-bot/bot-gateway/internal/webapi"
 )
 
 //go:generate mockgen -source=usecase.go -destination=./mocks/mocks.go -package=mocks

@@ -7,7 +7,7 @@ package mocks
 import (
 	reflect "reflect"
 
-	entity "github.com/IamVladlen/trend-bot/internal/entity"
+	entity "github.com/IamVladlen/trend-bot/bot-gateway/internal/entity"
 	gomock "github.com/golang/mock/gomock"
 )
 

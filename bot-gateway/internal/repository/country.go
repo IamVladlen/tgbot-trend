@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/IamVladlen/trend-bot/internal/entity"
-	"github.com/IamVladlen/trend-bot/pkg/mongodb"
+	"github.com/IamVladlen/trend-bot/bot-gateway/internal/entity"
+	"github.com/IamVladlen/trend-bot/bot-gateway/pkg/mongodb"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"

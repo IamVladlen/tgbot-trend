@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/IamVladlen/trend-bot/pkg/mongodb"
+	"github.com/IamVladlen/trend-bot/bot-gateway/pkg/mongodb"
 )
 
 const (

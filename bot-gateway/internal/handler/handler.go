@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"github.com/IamVladlen/trend-bot/internal/usecase"
-	"github.com/IamVladlen/trend-bot/pkg/logger"
+	"github.com/IamVladlen/trend-bot/bot-gateway/internal/usecase"
+	"github.com/IamVladlen/trend-bot/bot-gateway/pkg/logger"
 	th "github.com/mymmrac/telego/telegohandler"
 )
 
