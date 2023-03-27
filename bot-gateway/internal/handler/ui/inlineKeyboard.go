@@ -17,11 +17,26 @@ func InlineButton(cmd string) *telego.InlineKeyboardMarkup {
 	)
 }
 
-func InlineButtons(cmd1, cmd2 string) *telego.InlineKeyboardMarkup {
+func InlineButtons(cmd1, cmd2, cmd3 string) *telego.InlineKeyboardMarkup {
 	return tu.InlineKeyboard(
 		tu.InlineKeyboardRow(
 			tu.InlineKeyboardButton(cmd1).WithCallbackData(cmd1),
 			tu.InlineKeyboardButton(cmd2).WithCallbackData(cmd2),
+		),
+		tu.InlineKeyboardRow(
+			tu.InlineKeyboardButton(cmd3).WithCallbackData(cmd3),
+		),
+	)
+}
+
+func InlineButtonsSchedule(cmd1, cmd2, cmd3 string) *telego.InlineKeyboardMarkup {
+	return tu.InlineKeyboard(
+		tu.InlineKeyboardRow(
+			tu.InlineKeyboardButton(cmd1).WithCallbackData(cmd1),
+			tu.InlineKeyboardButton(cmd2).WithCallbackData(cmd2),
+		),
+		tu.InlineKeyboardRow(
+			tu.InlineKeyboardButton(cmd3).WithCallbackData(cmd3),
 		),
 	)
 }

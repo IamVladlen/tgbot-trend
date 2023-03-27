@@ -13,8 +13,9 @@ import (
 var errDummyTrends = errors.New("dummy trends error")
 
 type testDeps struct {
-	repo *mocks.MockTrendsRepo
-	api  *mocks.MockTrendsWebAPI
+	service *mocks.MockTrendsMicroservice
+	repo    *mocks.MockTrendsRepo
+	api     *mocks.MockTrendsWebAPI
 }
 
 func newTestTrendsUC(t *testing.T) (*TrendsUC, *testDeps) {
@@ -24,10 +25,11 @@ func newTestTrendsUC(t *testing.T) (*TrendsUC, *testDeps) {
 	defer ctrl.Finish()
 
 	deps := &testDeps{
+		mocks.NewMockTrendsMicroservice(ctrl),
 		mocks.NewMockTrendsRepo(ctrl),
 		mocks.NewMockTrendsWebAPI(ctrl),
 	}
-	uc := newTrendsUC(deps.repo, deps.api)
+	uc := newTrendsUC(deps.service, deps.repo, deps.api)
 
 	return uc, deps
 }

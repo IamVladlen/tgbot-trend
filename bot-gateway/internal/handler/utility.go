@@ -32,7 +32,7 @@ func (h *utilityHandler) start(bot *telego.Bot, message telego.Message) {
 	m := tu.Message(
 		tu.ID(message.Chat.ID),
 		msg.UtilStart,
-	).WithReplyMarkup(ui.InlineButton(_cmdCountry))
+	).WithReplyMarkup(ui.InlineButton(_btnCountry))
 
 	_, err := bot.SendMessage(m)
 	if err != nil {
@@ -46,7 +46,7 @@ func (h *utilityHandler) help(bot *telego.Bot, message telego.Message) {
 	m := tu.Message(
 		tu.ID(message.Chat.ID),
 		msg.UtilHelp,
-	).WithReplyMarkup(ui.InlineButtons(_cmdCountry, _cmdTrends))
+	).WithReplyMarkup(ui.InlineButtons(_btnSchedule, _btnCountry, _btnTrends))
 
 	_, err := bot.SendMessage(m)
 	if err != nil {

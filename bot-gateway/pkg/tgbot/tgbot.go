@@ -9,7 +9,7 @@ import (
 )
 
 type bot struct {
-	bot     *telego.Bot
+	Bot     *telego.Bot
 	Handler *th.BotHandler
 }
 
@@ -31,7 +31,7 @@ func New(token string) *bot {
 	}
 
 	return &bot{
-		bot:     b,
+		Bot:     b,
 		Handler: h,
 	}
 }
@@ -46,6 +46,6 @@ func (b *bot) Start() {
 
 // Stop gracefully stops updates receiving.
 func (b *bot) Stop() {
-	b.bot.StopLongPolling()
+	b.Bot.StopLongPolling()
 	b.Handler.Stop()
 }

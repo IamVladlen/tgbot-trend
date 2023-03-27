@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	_cmdCountry = "Set country"
+	_btnCountry = "Set country"
 )
 
 type countryHandler struct {
@@ -29,7 +29,7 @@ func newCountryHandler(handler *th.BotHandler, uc *usecase.UseCase, log *logger.
 		isChangeable: false,
 	}
 
-	handler.HandleCallbackQuery(h.callChangeCountry, th.CallbackDataEqual(_cmdCountry))
+	handler.HandleCallbackQuery(h.callChangeCountry, th.CallbackDataEqual(_btnCountry))
 	handler.HandleCallbackQuery(h.changeCountry, th.AnyCallbackQuery(), h.changeCountryCond)
 }
 
@@ -66,7 +66,7 @@ func (h *countryHandler) changeCountry(bot *telego.Bot, query telego.CallbackQue
 		m := tu.Message(
 			tu.ID(id),
 			msg.ChangeCountryInputFail,
-		).WithReplyMarkup(ui.InlineButton(_cmdCountry))
+		).WithReplyMarkup(ui.InlineButton(_btnCountry))
 
 		_, err := bot.SendMessage(m)
 		if err != nil {
@@ -88,7 +88,7 @@ func (h *countryHandler) changeCountry(bot *telego.Bot, query telego.CallbackQue
 		m := tu.Message(
 			tu.ID(id),
 			msg.ChangeCountryServerFail,
-		).WithReplyMarkup(ui.InlineButton(_cmdCountry))
+		).WithReplyMarkup(ui.InlineButton(_btnCountry))
 
 		_, err := bot.SendMessage(m)
 		if err != nil {
@@ -110,7 +110,7 @@ func (h *countryHandler) changeCountry(bot *telego.Bot, query telego.CallbackQue
 	m := tu.Message(
 		tu.ID(id),
 		msg.ChangeCountrySucc(query.Data),
-	).WithReplyMarkup(ui.InlineButtons(_cmdCountry, _cmdTrends))
+	).WithReplyMarkup(ui.InlineButtons(_btnSchedule, _btnCountry, _btnTrends))
 
 	_, err = bot.SendMessage(m)
 	if err != nil {

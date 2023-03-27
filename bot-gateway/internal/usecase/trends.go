@@ -1,14 +1,16 @@
 package usecase
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/IamVladlen/trend-bot/bot-gateway/internal/entity"
 )
 
 type TrendsUC struct {
-	repo TrendsRepo
-	api  TrendsWebAPI
+	service TrendsMicroservice
+	repo    TrendsRepo
+	api     TrendsWebAPI
 }
 
 // GetTrends sends struct with unmarshalled XML from
@@ -27,9 +29,27 @@ func (uc *TrendsUC) GetTrends(id int) (entity.Trends, error) {
 	return trends, nil
 }
 
-func newTrendsUC(repo TrendsRepo, api TrendsWebAPI) *TrendsUC {
+func (uc *TrendsUC) GetScheduledMessages(ctx context.Context, interval string) ([]int64, error) {
+	chatIds, err := uc.service.GetScheduledMessages(ctx, interval)
+	if err != nil {
+		return []int64{}, fmt.Errorf("usecase - GetScheduledMessage: %w", err)
+	}
+
+	return chatIds, nil
+}
+
+func (uc *TrendsUC) SetChatSchedule(ctx context.Context, chatId int64, interval string) error {
+	if err := uc.service.SetChatSchedule(ctx, chatId, interval); err != nil {
+		return fmt.Errorf("usecase - SetChatSchedule: %w", err)
+	}
+
+	return nil
+}
+
+func newTrendsUC(service TrendsMicroservice, repo TrendsRepo, api TrendsWebAPI) *TrendsUC {
 	return &TrendsUC{
-		repo: repo,
-		api:  api,
+		service: service,
+		repo:    repo,
+		api:     api,
 	}
 }

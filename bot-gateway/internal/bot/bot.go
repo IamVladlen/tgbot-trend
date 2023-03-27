@@ -7,6 +7,7 @@ import (
 
 	"github.com/IamVladlen/trend-bot/bot-gateway/config"
 	"github.com/IamVladlen/trend-bot/bot-gateway/internal/handler"
+	"github.com/IamVladlen/trend-bot/bot-gateway/internal/microservice"
 	"github.com/IamVladlen/trend-bot/bot-gateway/internal/repository"
 	"github.com/IamVladlen/trend-bot/bot-gateway/internal/usecase"
 	"github.com/IamVladlen/trend-bot/bot-gateway/internal/webapi"
@@ -14,6 +15,7 @@ import (
 	"github.com/IamVladlen/trend-bot/bot-gateway/pkg/mongodb"
 	"github.com/IamVladlen/trend-bot/bot-gateway/pkg/redisdb"
 	"github.com/IamVladlen/trend-bot/bot-gateway/pkg/tgbot"
+	"github.com/IamVladlen/trend-bot/bot-gateway/pkg/ticker"
 )
 
 // Run starts the bot and connects all dependencies.
@@ -29,13 +31,22 @@ func Run(cfg *config.Config, log *logger.Logger) {
 
 	// Bot dependencies
 	repo := repository.New(mgdb)
+	service := microservice.New()
 	webAPI := webapi.New(cache, log)
-	uc := usecase.New(repo, webAPI)
+	uc := usecase.New(service, repo, webAPI)
+	t := ticker.New()
 
 	// Bot initialization and start
 	bot := tgbot.New(cfg.Bot.Token)
-	handler.New(bot.Handler, uc, log)
+	handler.New(handler.Deps{
+		Bot:     bot.Bot,
+		Handler: bot.Handler,
+		UC:      uc,
+		Log:     log,
+		Ticker:  t,
+	})
 
+	t.StartAsync()
 	bot.Start()
 
 	// Graceful shutdown
@@ -54,4 +65,5 @@ func Run(cfg *config.Config, log *logger.Logger) {
 	}
 
 	cache.Close()
+	t.Stop()
 }
