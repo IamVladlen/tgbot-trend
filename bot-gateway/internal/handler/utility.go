@@ -23,35 +23,30 @@ func newUtilityHandler(handler *th.BotHandler, log *logger.Logger) {
 		log: log,
 	}
 
+	// Handle start command
 	handler.HandleMessage(h.start, th.CommandEqual(_cmdStart))
+	// Handle help command
 	handler.HandleMessage(h.help, th.CommandEqual(_cmdHelp))
+	// Handle health check
 	handler.HandleMessage(h.healthCheck, th.TextEqual("_Check"))
 }
 
 func (h *utilityHandler) start(bot *telego.Bot, message telego.Message) {
-	m := tu.Message(
-		tu.ID(message.Chat.ID),
-		msg.UtilStart,
-	).WithReplyMarkup(ui.InlineButton(_btnCountry))
+	id := message.Chat.ID
 
-	_, err := bot.SendMessage(m)
+	err := response(bot, id, ui.InlineButton(_btnCountry), msg.UtilStart)
 	if err != nil {
-		h.log.Error().
-			Err(err).
+		h.log.Error().Err(err).
 			Msg("Cannot send message")
 	}
 }
 
 func (h *utilityHandler) help(bot *telego.Bot, message telego.Message) {
-	m := tu.Message(
-		tu.ID(message.Chat.ID),
-		msg.UtilHelp,
-	).WithReplyMarkup(ui.InlineButtons(_btnSchedule, _btnCountry, _btnTrends))
+	id := message.Chat.ID
 
-	_, err := bot.SendMessage(m)
+	err := response(bot, id, ui.InlineButtons(_btnSchedule, _btnCountry, _btnTrends), msg.UtilHelp)
 	if err != nil {
-		h.log.Error().
-			Err(err).
+		h.log.Error().Err(err).
 			Msg("Cannot send message")
 	}
 }
@@ -64,8 +59,7 @@ func (h *utilityHandler) healthCheck(bot *telego.Bot, message telego.Message) {
 
 	_, err := bot.SendMessage(m)
 	if err != nil {
-		h.log.Error().
-			Err(err).
+		h.log.Error().Err(err).
 			Msg("Cannot send message")
 	}
 }
