@@ -1,4 +1,4 @@
-module github.com/IamVladlen/trend-bot/proto/scheduler
+module github.com/IamVladlen/tgbot-trend/proto/scheduler
 
 go 1.19
 
