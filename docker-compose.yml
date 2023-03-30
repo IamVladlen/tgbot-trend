@@ -43,6 +43,20 @@ services:
     networks:
       - tgbot
 
+  postgres:
+    image: postgres:alpine
+    container_name: postgres
+    ports:
+      - 5436:5432
+    environment:
+      - POSTGRES_USER=testUser
+      - POSTGRES_PASSWORD=testPass
+      - POSTGRES_DB=testDB
+    volumes:
+      - ./.storage-data/pg:/var/lib/postgresql/data
+    networks:
+      - tgbot
+
 networks:
   tgbot:
     driver: bridge
