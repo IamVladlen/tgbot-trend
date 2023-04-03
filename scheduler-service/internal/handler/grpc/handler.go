@@ -3,7 +3,7 @@ package grpc
 import (
 	"context"
 
-	grpcscheduler "github.com/IamVladlen/trend-bot/proto/scheduler"
+	grpcscheduler "github.com/IamVladlen/tgbot-trend/proto/scheduler"
 	"github.com/IamVladlen/trend-bot/scheduler-service/internal/usecase"
 	"github.com/IamVladlen/trend-bot/scheduler-service/pkg/grpcsrv"
 	"github.com/IamVladlen/trend-bot/scheduler-service/pkg/logger"
@@ -40,7 +40,9 @@ func (h *handler) SetChatSchedule(ctx context.Context, req *grpcscheduler.SetCha
 	if err != nil {
 		h.log.Error().Err(err).
 			Msg("Cannot set chat schedule")
+
+		return &grpcscheduler.SetChatResponse{}, err
 	}
 
-	return &grpcscheduler.SetChatResponse{}, err
+	return &grpcscheduler.SetChatResponse{}, nil
 }

@@ -23,3 +23,15 @@ services:
     command: redis-server /usr/local/etc/redis/redis.conf --requirepass testPass
     volumes:
       - ./.storage-data/rdbtest:/usr/local/etc/redis/redis.conf
+
+  postgres:
+    image: postgres:alpine
+    container_name: postgrestest
+    ports:
+      - 5436:5432
+    environment:
+      - POSTGRES_USER=testUser
+      - POSTGRES_PASSWORD=testPass
+      - POSTGRES_DB=testDB
+    volumes:
+      - ./.storage-data/pg:/var/lib/postgresql/data

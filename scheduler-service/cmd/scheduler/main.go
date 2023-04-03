@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/IamVladlen/trend-bot/scheduler-service/config"
-	"github.com/IamVladlen/trend-bot/scheduler-service/pkg/logger"
 	"github.com/IamVladlen/trend-bot/scheduler-service/internal/app"
+	"github.com/IamVladlen/trend-bot/scheduler-service/pkg/logger"
 )
 
 func main() {

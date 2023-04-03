@@ -1,12 +1,11 @@
-CREATE TABLE IF NOT EXISTS chat (
-   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-   chat_id BIGINT,
+CREATE TABLE IF NOT EXISTS chats (
+   id BIGINT PRIMARY KEY,
    newsletter_interval VARCHAR(80),
    created_at TIMESTAMPTZ DEFAULT now(),
    updated_at TIMESTAMPTZ DEFAULT now()
 );
 
-CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+CREATE OR REPLACE FUNCTION set_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
    NEW.updated_at = now();
@@ -14,7 +13,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER IF NOT EXISTS set_timestamp
-   BEFORE UPDATE ON chat
+CREATE OR REPLACE TRIGGER trigger_set_timestamp
+   BEFORE UPDATE ON chats
    FOR EACH ROW
-   EXECUTE PROCEDURE trigger_set_timestamp();
+   EXECUTE PROCEDURE set_timestamp();

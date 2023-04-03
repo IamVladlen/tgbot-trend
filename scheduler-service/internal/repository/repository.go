@@ -12,14 +12,16 @@ type Repository struct {
 }
 
 func New(pg *postgres.DB) *Repository {
-	return &Repository{}
+	return &Repository{
+		pg,
+	}
 }
 
 func (db *Repository) GetScheduledMessages(ctx context.Context, interval string) ([]int64, error) {
 	chatIds := make([]int64, 0)
 
-	q := `SELECT chat_id
-			FROM users
+	q := `SELECT id
+			FROM chats
 			WHERE newsletter_interval = $1;`
 	rows, err := db.Query(ctx, q, interval)
 	if err != nil {
@@ -40,9 +42,9 @@ func (db *Repository) GetScheduledMessages(ctx context.Context, interval string)
 }
 
 func (db *Repository) SetChatSchedule(ctx context.Context, chatId int64, interval string) error {
-	q := `INSERT INTO chats (chat_id, newsletter_interval)
-			VALUES($1, $2)
-			ON CONFLICT (chat_id)
+	q := `INSERT INTO chats (id, newsletter_interval)
+			VALUES ($1, $2)
+			ON CONFLICT (id)
 			DO UPDATE
 			SET newsletter_interval = EXCLUDED.newsletter_interval;`
 	_, err := db.Exec(ctx, q, chatId, interval)

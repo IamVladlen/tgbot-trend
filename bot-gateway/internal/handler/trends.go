@@ -17,7 +17,7 @@ const (
 	_btnTrends   = "Get trends"
 	_btnDaily    = "Daily"
 	_btnWeekly   = "Weekly"
-	_btnAbort    = "Unsubscribe"
+	_btnUnsubscribe    = "Unsubscribe"
 	_btnSchedule = "Newsletter"
 )
 
@@ -41,6 +41,13 @@ func newTrendsHandler(bot *telego.Bot, handler *th.BotHandler, uc *usecase.UseCa
 			Msg("Cannot send message")
 	}
 
+	// Handle scheduled messages everyday
+	_, err = t.Every(1).Minute().Do(func() { h.getScheduledMessages(bot, "Daily") })
+	if err != nil {
+		log.Error().Err(err).
+			Msg("Cannot send message")
+	}
+
 	// Handle scheduled messages every week
 	_, err = t.Every(1).Week().Weekday(time.Sunday).At("20:00").Do(func() { h.getScheduledMessages(bot, "Weekly") })
 	if err != nil {
@@ -53,7 +60,9 @@ func newTrendsHandler(bot *telego.Bot, handler *th.BotHandler, uc *usecase.UseCa
 	// Handle chat schedule trigger
 	handler.HandleCallbackQuery(h.callSetChatSchedule, th.CallbackDataEqual(_btnSchedule))
 	// Handle chat schedule
-	handler.HandleCallbackQuery(h.setChatSchedule, th.CallbackDataEqual(_btnDaily), th.CallbackDataEqual(_btnWeekly), th.CallbackDataEqual(_btnAbort))
+	handler.HandleCallbackQuery(h.setChatSchedule, th.CallbackDataEqual(_btnDaily))
+	handler.HandleCallbackQuery(h.setChatSchedule, th.CallbackDataEqual(_btnWeekly))
+	handler.HandleCallbackQuery(h.setChatSchedule, th.CallbackDataEqual(_btnUnsubscribe))
 }
 
 // getTrends sends a list of trends.
@@ -119,12 +128,14 @@ func (h *trendsHandler) getScheduledMessages(bot *telego.Bot, interval string) {
 func (h *trendsHandler) callSetChatSchedule(bot *telego.Bot, query telego.CallbackQuery) {
 	id := query.Message.Chat.ID
 
-	err := response(bot, id, ui.InlineButtonsSchedule(_btnDaily, _btnWeekly, _btnAbort), msg.CallSetChatSchedule)
+	err := response(bot, id, ui.InlineButtonsSchedule(_btnDaily, _btnWeekly, _btnUnsubscribe), msg.CallSetChatSchedule)
 	if err != nil {
 		h.log.Error().Err(err).
 			Msg("Cannot send message")
 	}
 }
+
+// TODO: Delete previous message if invoked
 
 // setChatSchedule sets schedule for newsletter.
 func (h *trendsHandler) setChatSchedule(bot *telego.Bot, query telego.CallbackQuery) {
@@ -135,7 +146,7 @@ func (h *trendsHandler) setChatSchedule(bot *telego.Bot, query telego.CallbackQu
 		h.log.Error().Err(err).
 			Msg("Cannot set chat schedule")
 
-		err := response(bot, id, ui.InlineButtonsSchedule(_btnSchedule, _btnCountry, _btnTrends), msg.SetChatScheduleSucc)
+		err := response(bot, id, ui.InlineButtonsSchedule(_btnSchedule, _btnCountry, _btnTrends), msg.SetChatScheduleErr)
 		if err != nil {
 			h.log.Error().Err(err).
 				Msg("Cannot send message")

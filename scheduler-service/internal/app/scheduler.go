@@ -23,6 +23,8 @@ func Run(log *logger.Logger, cfg *config.Config) {
 	grpcSrv := grpcsrv.New(cfg.GRPC.Port)
 	grpc.New(uc, grpcSrv, log)
 
+	log.Info().Msg("Scheduler service has successfully launched")
+
 	// Graceful shutdown
 	sigCh := make(chan os.Signal, 1)
 	signal.Notify(sigCh, syscall.SIGTERM, syscall.SIGINT)

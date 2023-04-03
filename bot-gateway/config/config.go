@@ -19,6 +19,10 @@ type Config struct {
 		Token string `mapstructure:"BOT_TOKEN"`
 	} `mapstructure:",squash"`
 
+	GRPC struct {
+		URI string `mapstructure:"GRPC_SCHEDULER_URI"`
+	} `mapstructure:",squash"`
+
 	Mongo struct {
 		URI      string `mapstructure:"MONGO_URI"`
 		DBName   string `mapstructure:"MONGO_INITDB_DATABASE"`
@@ -43,11 +47,11 @@ func New() *Config {
 	}
 
 	viper.AutomaticEnv()
-	
+
 	if err := viper.Unmarshal(&cfg); err != nil {
 		log.Fatalln("Can't load config file:", err)
 	}
-	
+
 	loadEnv(cfg)
 
 	return cfg
@@ -55,6 +59,8 @@ func New() *Config {
 
 func loadEnv(cfg *Config) {
 	cfg.Bot.Token = os.Getenv("BOT_TOKEN")
+
+	cfg.GRPC.URI = os.Getenv("GRPC_SCHEDULER_URI")
 
 	cfg.Mongo.URI = os.Getenv("MONGO_URI")
 	cfg.Mongo.DBName = os.Getenv("MONGO_INITDB_DATABASE")

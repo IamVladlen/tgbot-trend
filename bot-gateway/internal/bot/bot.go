@@ -5,6 +5,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	grpcscheduler "github.com/IamVladlen/tgbot-trend/proto/scheduler"
 	"github.com/IamVladlen/trend-bot/bot-gateway/config"
 	"github.com/IamVladlen/trend-bot/bot-gateway/internal/handler"
 	"github.com/IamVladlen/trend-bot/bot-gateway/internal/microservice"
@@ -31,7 +32,8 @@ func Run(cfg *config.Config, log *logger.Logger) {
 
 	// Bot dependencies
 	repo := repository.New(mgdb)
-	service := microservice.New()
+	scheduler := grpcscheduler.New(cfg.GRPC.URI)
+	service := microservice.New(scheduler)
 	webAPI := webapi.New(cache, log)
 	uc := usecase.New(service, repo, webAPI)
 	t := ticker.New()

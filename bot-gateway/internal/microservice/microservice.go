@@ -1,11 +1,13 @@
 package microservice
 
+import grpcscheduler "github.com/IamVladlen/tgbot-trend/proto/scheduler"
+
 type Microservice struct {
 	*scheduler
 }
 
-func New() *Microservice {
+func New(grpcclt grpcscheduler.SchedulerClient) *Microservice {
 	return &Microservice{
-		newSchedulerService(),
+		newSchedulerService(grpcclt),
 	}
 }
