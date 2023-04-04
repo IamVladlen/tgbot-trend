@@ -23,7 +23,7 @@ func New(url string) *DB {
 	}
 
 	// Try to create connection pool
-	for i := 5; i > 0; i-- {
+	for i := 10; i > 0; i-- {
 		pg.Pool, err = pgxpool.NewWithConfig(context.Background(), pgconfig)
 		if err == nil {
 			break
@@ -31,7 +31,12 @@ func New(url string) *DB {
 
 		log.Printf("trying to connect to postgres, attempts left: %d\n", i)
 
-		time.Sleep(time.Second * 1)
+		<-time.After(1 * time.Second)
+	}
+
+	// Health check
+	if err := pg.Ping(context.Background()); err != nil {
+		log.Fatalln("Cannot connect to postgres:", err)
 	}
 
 	return pg
