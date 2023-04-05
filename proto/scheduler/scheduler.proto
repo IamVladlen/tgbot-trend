@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package api;
+
+option go_package = "/grpcscheduler";
+
+service scheduler {
+   rpc GetScheduledMessages(GetScheduledRequest) returns (GetScheduledResponse) {}
+   rpc SetChatSchedule(SetChatRequest) returns (SetChatResponse) {}
+}
+
+message GetScheduledRequest {
+   string interval = 1;
+}
+
+message GetScheduledResponse {
+   repeated int64 ids = 1;
+}
+
+message SetChatRequest {
+   int64 chatId = 1;
+   string interval = 2;
+}
+
+message SetChatResponse {}

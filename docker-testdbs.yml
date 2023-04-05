@@ -5,21 +5,33 @@ services:
     image: mongo
     container_name: mongotest
     ports:
-      - 27017:27017
+      - 27019:27017
     restart: unless-stopped
     environment:
       - MONGO_INITDB_DATABASE=tgbot_test
       - MONGO_INITDB_ROOT_USERNAME=testUser
       - MONGO_INITDB_ROOT_PASSWORD=testPass
     volumes:
-      - ./.storage-data/mgdbtest:/data/db
+      - ./.storage-test/mgdbtest:/data/db
 
   redistest:
     image: redis:alpine
     container_name: redistest
     ports:
-      - 6379:6379
+      - 6381:6379
     restart: unless-stopped
     command: redis-server /usr/local/etc/redis/redis.conf --requirepass testPass
     volumes:
-      - ./.storage-data/rdbtest:/usr/local/etc/redis/redis.conf
+      - ./.storage-test/rdbtest:/usr/local/etc/redis/redis.conf
+
+  postgres:
+    image: postgres:alpine
+    container_name: postgrestest
+    ports:
+      - 5437:5432
+    environment:
+      - POSTGRES_USER=testUser
+      - POSTGRES_PASSWORD=testPass
+      - POSTGRES_DB=testDB
+    volumes:
+      - ./.storage-test/pg:/var/lib/postgresql/data
