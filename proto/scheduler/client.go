@@ -14,7 +14,7 @@ type Client struct {
 func New(uri string) *Client {
 	conn, err := grpc.Dial(uri, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Cannot connect to scheduler gRPC server:", err)
 	}
 
 	client := NewSchedulerClient(conn)
