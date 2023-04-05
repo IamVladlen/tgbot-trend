@@ -11,14 +11,15 @@ import (
 	"github.com/IamVladlen/trend-bot/bot-gateway/pkg/ticker"
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
+	tu "github.com/mymmrac/telego/telegoutil"
 )
 
 const (
-	_btnTrends   = "Get trends"
-	_btnDaily    = "Daily"
-	_btnWeekly   = "Weekly"
-	_btnUnsubscribe    = "Unsubscribe"
-	_btnSchedule = "Newsletter"
+	_btnTrends      = "Get trends"
+	_btnDaily       = "Daily"
+	_btnWeekly      = "Weekly"
+	_btnUnsubscribe = "Unsubscribe"
+	_btnSchedule    = "Newsletter"
 )
 
 type trendsHandler struct {
@@ -36,13 +37,6 @@ func newTrendsHandler(bot *telego.Bot, handler *th.BotHandler, uc *usecase.UseCa
 
 	// Handle scheduled messages everyday
 	_, err := t.Every(1).Day().At("20:00").Do(func() { h.getScheduledMessages(bot, "Daily") })
-	if err != nil {
-		log.Error().Err(err).
-			Msg("Cannot send message")
-	}
-
-	// Handle scheduled messages everyday
-	_, err = t.Every(1).Minute().Do(func() { h.getScheduledMessages(bot, "Daily") })
 	if err != nil {
 		log.Error().Err(err).
 			Msg("Cannot send message")
@@ -146,7 +140,13 @@ func (h *trendsHandler) setChatSchedule(bot *telego.Bot, query telego.CallbackQu
 		h.log.Error().Err(err).
 			Msg("Cannot set chat schedule")
 
-		err := response(bot, id, ui.InlineButtonsSchedule(_btnSchedule, _btnCountry, _btnTrends), msg.SetChatScheduleErr)
+		err := bot.DeleteMessage(&telego.DeleteMessageParams{ChatID: tu.ID(id), MessageID: query.Message.MessageID})
+		if err != nil {
+			h.log.Error().Err(err).
+				Msg("Cannot set chat schedule")
+		}
+
+		err = response(bot, id, ui.InlineButtonsSchedule(_btnSchedule, _btnCountry, _btnTrends), msg.SetChatScheduleErr)
 		if err != nil {
 			h.log.Error().Err(err).
 				Msg("Cannot send message")
@@ -155,7 +155,13 @@ func (h *trendsHandler) setChatSchedule(bot *telego.Bot, query telego.CallbackQu
 		return
 	}
 
-	err := response(bot, id, ui.InlineButtonsSchedule(_btnSchedule, _btnCountry, _btnTrends), msg.SetChatScheduleSucc)
+	err := bot.DeleteMessage(&telego.DeleteMessageParams{ChatID: tu.ID(id), MessageID: query.Message.MessageID})
+	if err != nil {
+		h.log.Error().Err(err).
+			Msg("Cannot set chat schedule")
+	}
+
+	err = response(bot, id, ui.InlineButtonsSchedule(_btnSchedule, _btnCountry, _btnTrends), msg.SetChatScheduleSucc)
 	if err != nil {
 		h.log.Error().Err(err).
 			Msg("Cannot send message")
