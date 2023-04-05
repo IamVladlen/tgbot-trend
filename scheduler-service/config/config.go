@@ -20,7 +20,8 @@ type Config struct {
 	} `mapstructure:",squash"`
 
 	PG struct {
-		URL string `mapstructure:"POSTGRES_URL"`
+		URL       string `mapstructure:"POSTGRES_URL"`
+		Migration string `mapstructure:"PG_MIGRATION_URL"`
 	} `mapstructure:",squash"`
 }
 
@@ -47,6 +48,7 @@ func New() *Config {
 
 func loadEnv(cfg *Config) {
 	cfg.GRPC.Port = os.Getenv("GRPC_SCHEDULER_PORT")
-	
+
 	cfg.PG.URL = os.Getenv("POSTGRES_URL")
+	cfg.PG.Migration = os.Getenv("PG_MIGRATION_URL")
 }

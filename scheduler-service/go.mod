@@ -7,7 +7,19 @@ require github.com/jackc/pgx/v5 v5.3.1
 require github.com/IamVladlen/tgbot-trend/proto/scheduler v0.0.0-20230330182003-6ac1aa03baa3
 
 require (
+	github.com/google/go-github/v39 v39.2.0 // indirect
+	github.com/google/go-querystring v1.1.0 // indirect
+	github.com/hashicorp/errwrap v1.1.0 // indirect
+	github.com/hashicorp/go-multierror v1.1.1 // indirect
+	github.com/lib/pq v1.10.0 // indirect
+	go.uber.org/atomic v1.9.0 // indirect
+	golang.org/x/oauth2 v0.4.0 // indirect
+	google.golang.org/appengine v1.6.7 // indirect
+)
+
+require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
+	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect

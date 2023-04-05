@@ -11,13 +11,16 @@ import (
 	"github.com/IamVladlen/trend-bot/scheduler-service/internal/usecase"
 	"github.com/IamVladlen/trend-bot/scheduler-service/pkg/grpcsrv"
 	"github.com/IamVladlen/trend-bot/scheduler-service/pkg/logger"
+	"github.com/IamVladlen/trend-bot/scheduler-service/pkg/migration"
 	"github.com/IamVladlen/trend-bot/scheduler-service/pkg/postgres"
 )
 
 func Run(log *logger.Logger, cfg *config.Config) {
 	pg := postgres.New(cfg.PG.URL)
+	migration.LoadMigrationSQL(cfg.PG.URL, cfg.PG.Migration)
 
 	repo := repository.New(pg)
+
 	uc := usecase.New(repo)
 
 	grpcSrv := grpcsrv.New(cfg.GRPC.Port)
