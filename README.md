@@ -15,6 +15,9 @@
 ### Stack
 
 Logging: [Zerolog](https://github.com/rs/zerolog)  
-Database: [MongoDB](https://www.mongodb.com/)  
-Caching: [Redis](https://redis.io/)  
-[Docker](https://www.docker.com/)
+Databases: [MongoDB](https://hub.docker.com/_/mongo), [PostgreSQL](https://hub.docker.com/_/postgres)  
+Caching: [Redis](https://hub.docker.com/_/redis)  
+Microservice communication: [gRPC](https://github.com/grpc/grpc)  
+
+***
+vladlen.polyakov@gmail.com
